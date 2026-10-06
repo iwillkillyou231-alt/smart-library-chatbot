@@ -1,0 +1,17 @@
+{
+  "beginner": [
+    "introduction", "intro", "basics", "basic", "fundamentals",
+    "for beginners", "beginner", "beginners", "easy", "simple",
+    "getting started", "gentle introduction", "primer", "essentials"
+  ],
+  "intermediate": [
+    "intermediate", "medium", "moderate", "mid-level",
+    "some experience", "practical", "hands-on"
+  ],
+  "advanced": [
+    "advanced", "expert", "in-depth", "research", "graduate",
+    "specialized", "state of the art", "cutting edge", "deep dive",
+    "comprehensive", "definitive"
+  ],
+  "default": "intermediate"
+}

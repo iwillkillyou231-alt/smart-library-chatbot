@@ -1,0 +1,33 @@
+id,query,expected_category,expected_difficulty,expected_keywords,notes
+1,"I want a nursing book about pediatric care","Nursing","","pediatric",topic
+2,"Books about oncology nursing","Nursing","","oncology",topic
+3,"Beginner book about patient care","Nursing","","care",topic
+4,"Advanced psychiatric nursing book","Nursing","advanced","psychiatric",difficulty+topic
+5,"Books on maternal and newborn care","Nursing","","maternal,newborn",topic
+6,"Gerontological nursing guide","Nursing","","gerontological",topic
+7,"Critical care nursing textbook","Nursing","","critical",topic
+8,"I need something about nutrition and diet therapy","Nursing","","nutrition",topic
+9,"Pharmacology book for nurses","Nursing","","pharmacology",topic
+10,"Books about community health nursing","Nursing","","community",topic
+11,"Nursing leadership and management","Nursing","","leadership",topic
+12,"Emergency nursing book","Nursing","","emergency",topic
+13,"Anatomy and physiology for nursing students","Nursing","","health",topic
+14,"Evidence-based nursing practice","Nursing","","evidence",topic
+15,"Cardiac nursing care","Nursing","","cardiac",topic
+16,"Books on mental health nursing","Nursing","","mental",topic
+17,"Pediatric intensive care nursing","Nursing","","pediatric,critical",topic
+18,"Books about nursing research methods","Nursing","","research",topic
+19,"Family health nursing textbook","Nursing","","family",topic
+20,"Perioperative nursing book","Nursing","","surgical",topic
+21,"Nursing care for cancer patients","Nursing","","cancer",topicw
+22,"Nursing assessment and diagnosis","Nursing","","assessment",topic
+23,"Advanced nursing practice book","Nursing","","evidence",topic
+24,"Foundations of nursing textbook","Nursing","","concept",topic
+25,"Nursing ethics and law","Nursing","","ethics",topic
+26,"Books about nursing informatics","Nursing","","informatics",topic
+27,"Pediatric nursing drug guide","Nursing","","drug,pediatric",topic
+28,"Geriatric health assessment","Nursing","","geriatric",topic
+29,"Maternal newborn nursing care","Nursing","","maternal",topic
+30,"Psychiatric mental health nursing","Nursing","","psychiatric,mental",topic
+31,"Something easier on nursing","Nursing","","easier",follow-up
+32,"Nursing books but not pediatric","Nursing","","nursing",negation

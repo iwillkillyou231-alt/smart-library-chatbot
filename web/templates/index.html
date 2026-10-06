@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Library — Book Discovery</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+<div class="app" id="app">
+
+    <!-- ============ MOBILE SIDEBAR BACKDROP ============ -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop" aria-hidden="true"></div>
+
+    <!-- ============ SIDEBAR ============ -->
+    <aside class="sidebar" id="sidebar" aria-label="Library navigation">
+        <div class="sidebar-head">
+            <div class="logo" aria-hidden="true">📚</div>
+            <div class="sidebar-head-text">
+                <div class="brand">Smart Library</div>
+                <div class="brand-sub">NWU · 400 books</div>
+            </div>
+            <button
+                class="collapse-btn"
+                id="collapseBtn"
+                type="button"
+                aria-label="Collapse sidebar"
+                title="Collapse sidebar"
+            >‹</button>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-label">Recent searches</div>
+            <ul id="historyList" class="history-list">
+                <li class="history-empty">No searches yet</li>
+            </ul>
+        </div>
+
+        <button id="newChatBtn" class="new-chat-btn" type="button" title="Start a new conversation">
+            <span aria-hidden="true">＋</span> New chat
+        </button>
+    </aside>
+
+    <!-- ============ MAIN ============ -->
+    <main class="main">
+        <div class="chat-panel">
+
+            <div class="panel-header">
+                <button
+                    id="menuBtn"
+                    class="panel-menu"
+                    type="button"
+                    aria-label="Open navigation menu"
+                    title="Menu"
+                >☰</button>
+
+                <div class="panel-avatar" aria-hidden="true">👽</div>
+
+                <div class="panel-title">
+                    <div class="panel-name">Bobet Butterbonia</div>
+                    <div class="panel-sub">
+                        <span class="status-dot" aria-hidden="true"></span>
+                        Online · Library Assistant
+                    </div>
+                </div>
+
+                <button
+                    id="resetBtn"
+                    class="panel-reset"
+                    type="button"
+                    aria-label="Reset conversation"
+                    title="Reset chat"
+                >↻</button>
+            </div>
+
+            <div class="panel-lines" aria-hidden="true">
+                <span></span><span></span><span></span>
+            </div>
+
+            <div class="chat-body">
+
+                <section
+                    class="welcome"
+                    id="welcome"
+                    aria-label="Welcome and quick suggestions"
+                >
+                    <div class="welcome-avatar" aria-hidden="true">👽</div>
+                    <h2 class="welcome-title">What would you like to discover today?</h2>
+                    <p class="welcome-sub">
+                        I'm Bobet Butterbonia. Tell me a topic, author, or level
+                        and I'll find matching books in the NWU library.
+                    </p>
+
+                    <div class="welcome-grid" role="list">
+                        <button class="welcome-card" type="button" role="listitem" data-q="beginner friendly books">
+                            <span class="welcome-icon" aria-hidden="true">📖</span>
+                            <span class="welcome-label">Beginner-Friendly Books</span>
+                            <span class="welcome-hint">Easy reads to get started</span>
+                        </button>
+                        <button class="welcome-card" type="button" role="listitem" data-q="engineering books">
+                            <span class="welcome-icon" aria-hidden="true">⚙️</span>
+                            <span class="welcome-label">Engineering</span>
+                            <span class="welcome-hint">Civil, mechanical, marine…</span>
+                        </button>
+                        <button class="welcome-card" type="button" role="listitem" data-q="psychology books">
+                            <span class="welcome-icon" aria-hidden="true">🧠</span>
+                            <span class="welcome-label">Psychology</span>
+                            <span class="welcome-hint">Behavior, mind, and more</span>
+                        </button>
+                        <button class="welcome-card" type="button" role="listitem" data-q="law books">
+                            <span class="welcome-icon" aria-hidden="true">⚖️</span>
+                            <span class="welcome-label">Law</span>
+                            <span class="welcome-hint">Criminal, civil, and case law</span>
+                        </button>
+                    </div>
+                </section>
+
+                <section
+                    class="messages"
+                    id="messages"
+                    aria-live="polite"
+                    aria-label="Conversation"
+                ></section>
+            </div>
+
+            <form id="chatForm" class="composer-pill" autocomplete="off">
+                <label for="queryInput" class="sr-only">Ask for a book</label>
+                <input
+                    type="text"
+                    id="queryInput"
+                    name="query"
+                    placeholder="Type your request here..."
+                    aria-label="Type your request"
+                    required
+                />
+
+                <button
+                    type="button"
+                    class="sparkle-btn"
+                    id="surpriseBtn"
+                    aria-label="Surprise me with a random search"
+                    title="Surprise me"
+                >✦</button>
+
+                <button
+                    type="submit"
+                    id="sendBtn"
+                    class="send-circle"
+                    aria-label="Send message"
+                    title="Send"
+                >↑</button>
+            </form>
+
+            <div class="hints" aria-label="Suggested searches">
+                <span class="hints-label">Try:</span>
+                <button class="hint-chip" type="button" data-q="Beginner nursing book about pediatric care">beginner nursing</button>
+                <button class="hint-chip" type="button" data-q="Advanced criminal law book">advanced law</button>
+                <button class="hint-chip" type="button" data-q="Psychology of human behavior">psychology</button>
+                <button class="hint-chip" type="button" data-q="Marine engineering textbook">marine engineering</button>
+            </div>
+
+            <p class="disclaimer" role="note">
+                Bobet Butterbonia can make mistakes. Check important info.
+            </p>
+
+        </div>
+    </main>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-label="Book details">
+    <div class="modal" id="modal">
+        <button class="modal-close" id="modalClose" type="button" aria-label="Close">✕</button>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<script>
+const messages         = document.getElementById('messages');
+const welcomeEl        = document.getElementById('welcome');
+const form             = document.getElementById('chatForm');
+const input            = document.getElementById('queryInput');
+const sendBtn          = document.getElementById('sendBtn');
+const surpriseBtn      = document.getElementById('surpriseBtn');
+const historyList      = document.getElementById('historyList');
+const newChatBtn       = document.getElementById('newChatBtn');
+const resetBtn         = document.getElementById('resetBtn');
+const menuBtn          = document.getElementById('menuBtn');
+const collapseBtn      = document.getElementById('collapseBtn');
+const sidebar          = document.getElementById('sidebar');
+const sidebarBackdrop  = document.getElementById('sidebarBackdrop');
+const appEl            = document.getElementById('app');
+const modalBody        = document.getElementById('modalBody');
+const modalBackdrop    = document.getElementById('modalBackdrop');
+const modalClose       = document.getElementById('modalClose');
+
+/* ============================================================
+   HISTORY + VALIDATION
+   ============================================================ */
+const CASUAL_EXACT = new Set([
+    "hi","hello","hey","yo","sup","howdy","hiya","ho","hello?",
+    "thanks","thank","ty","thank you","thx","salamat",
+    "bye","goodbye","later","see ya","see you",
+    "okay","ok","k","sure","yes","no","yeah","nope",
+    "cool","nice","good","great","awesome","fine",
+    "good morning","good afternoon","good evening",
+    "g","f","s","w","h","a","b","c","d","e","j","k","l","m",
+    "n","o","p","q","r","t","u","v","x","y","z",
+    "we","sw","me","us","am","pm","um","uh","hmm","hmmm",
+    "what","why","when","who","where","how","fuck","shit",
+    "test","testing","asdf","asdasd","portal","books"
+]);
+const SHORT_VALID = new Set([
+    "law","art","ai","ml","cs","it","os","db","pe",
+    "nstp","bio","chem","math","phy","eng","nur"
+]);
+
+function isValidLibrarySearch(message) {
+    if (!message) return false;
+    const text = message.trim().toLowerCase();
+    if (!text) return false;
+    if (CASUAL_EXACT.has(text)) return false;
+    if (SHORT_VALID.has(text)) return true;
+    if (text.length < 4) return false;
+    if (!/[a-z]/.test(text)) return false;
+    const fillers = new Set([
+        "the","a","an","is","are","for","about","i","want","need",
+        "looking","find","show","me","please","can","you","give",
+        "some","what","how","why","when","who","where","have"
+    ]);
+    const meaningful = text.split(/\s+/).filter(w =>
+        w.length >= 3 && !fillers.has(w) && !CASUAL_EXACT.has(w)
+    );
+    return meaningful.length > 0;
+}
+
+let history = JSON.parse(localStorage.getItem('libraryHistory') || '[]')
+    .filter(q => typeof q === 'string' && isValidLibrarySearch(q));
+let lastResults = [];
+
+function saveHistory() { localStorage.setItem('libraryHistory', JSON.stringify(history)); }
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+function escapeHtml(s) {
+    if (s == null) return '';
+    return String(s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function scrollBottom() { messages.scrollTop = messages.scrollHeight; }
+
+/* ============================================================
+   WELCOME + HISTORY RENDER
+   ============================================================ */
+function showWelcome() { welcomeEl.classList.remove('hidden'); }
+function hideWelcome() { welcomeEl.classList.add('hidden'); }
+
+function renderHistory() {
+    if (history.length === 0) {
+        historyList.innerHTML = '<li class="history-empty">No searches yet</li>';
+        return;
+    }
+    historyList.innerHTML = history.map(q =>
+        `<li class="history-item" data-q="${escapeHtml(q)}" tabindex="0" role="button" title="${escapeHtml(q)}">${escapeHtml(q)}</li>`
+    ).join('');
+    historyList.querySelectorAll('.history-item').forEach(el => {
+        el.addEventListener('click', () => {
+            sendQuery(el.dataset.q);
+            closeSidebarMobile();
+        });
+        el.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                sendQuery(el.dataset.q);
+                closeSidebarMobile();
+            }
+        });
+    });
+}
+
+function pushHistory(q) {
+    const trimmed = q.trim();
+    if (!isValidLibrarySearch(trimmed)) return;
+    history = [
+        trimmed,
+        ...history.filter(h => h.toLowerCase() !== trimmed.toLowerCase())
+    ].slice(0, 12);
+    saveHistory();
+    renderHistory();
+}
+
+/* ============================================================
+   MESSAGES
+   ============================================================ */
+function addUserMessage(text) {
+    const el = document.createElement('div');
+    el.className = 'msg user';
+    el.innerHTML = `<div class="bubble">${escapeHtml(text)}</div>`;
+    messages.appendChild(el);
+    scrollBottom();
+}
+function addBotBubble(html) {
+    const el = document.createElement('div');
+    el.className = 'msg bot';
+    el.innerHTML = `<div class="avatar" aria-hidden="true">👽</div><div class="body"><div class="bubble">${html}</div></div>`;
+    messages.appendChild(el);
+    scrollBottom();
+    return el.querySelector('.body');
+}
+function addLoadingBubble() {
+    const el = document.createElement('div');
+    el.className = 'msg bot';
+    el.innerHTML = `
+        <div class="avatar" aria-hidden="true">👽</div>
+        <div class="body">
+            <div class="bubble">
+                <div class="typing-shimmer">
+                    <div class="typing-label">Generating results...</div>
+                    <div class="typing-bar"></div>
+                    <div class="typing-bar"></div>
+                </div>
+            </div>
+        </div>`;
+    messages.appendChild(el);
+    scrollBottom();
+    return el;
+}
+
+/* ============================================================
+   RESULT RENDERERS
+   ============================================================ */
+function renderResults(data, skipIntro = false) {
+    const prefs = data.preferences || {};
+    const chips = [];
+    if (prefs.difficulty) chips.push(`<span class="tag">${escapeHtml(prefs.difficulty)}</span>`);
+    if (prefs.category)   chips.push(`<span class="tag">${escapeHtml(prefs.category)}</span>`);
+    if (prefs.negated && prefs.negated.length)
+        chips.push(`<span class="tag warn">not ${escapeHtml(prefs.negated.join(', '))}</span>`);
+
+    if (!data.results || data.results.length === 0) {
+        return `<p>Hmm, I couldn't find a strong match for that.<br>
+                Try different words, or ask about another topic.</p>`;
+    }
+
+    let html = skipIntro ? '' : '<p class="intro">Here are the closest matches I found 📚</p>';
+    if (chips.length) html += `<div class="tags">${chips.join('')}</div>`;
+
+    html += '<ol class="book-list">';
+    data.results.forEach((r, i) => {
+        html += `
+        <li class="book" data-idx="${i}" tabindex="0" role="button" aria-label="View details for ${escapeHtml(r.title)}">
+            <div class="book-num">${i + 1}</div>
+            <div class="book-main">
+                <div class="book-title">${escapeHtml(r.title)}</div>
+                <div class="book-author">${escapeHtml(r.author)}</div>
+                <div class="book-meta">
+                    <span class="emoji-line">📍 ${escapeHtml(r.subcategory || r.category)}</span>
+                    <span class="emoji-line">📊 ${escapeHtml(r.difficulty)}</span>
+                    <span class="emoji-line">🎯 ${r.score_percent}% match</span>
+                </div>
+                <div class="book-badges">
+                    <span class="badge ${r.availability === 'borrowed' ? 'warn' : 'ok'}">${escapeHtml(r.availability)}</span>
+                    <span class="badge ${r.location === 'portal' ? 'info' : ''}">${escapeHtml(r.location)}</span>
+                    ${r.call_number ? `<span class="badge">${escapeHtml(r.call_number)}</span>` : ''}
+                </div>
+            </div>
+            <button class="book-expand" type="button" aria-hidden="true" tabindex="-1">›</button>
+        </li>`;
+    });
+    html += '</ol>';
+    html += `<p class="casual">Want details? Click a book, or reply with a topic to narrow down.</p>`;
+    return html;
+}
+
+function renderPromptPrompt(promptData) {
+    const { count, short_list, subcategories, common_word } = promptData;
+    const chips = short_list.map((label, i) =>
+        `<button class="prompt-chip" type="button" data-subcat="${escapeHtml(subcategories[i])}">${escapeHtml(label)}</button>`
+    ).join('');
+    const tail = common_word ? ` <strong>${escapeHtml(common_word)}</strong>` : '';
+    return `
+        <p style="margin-top:12px;">I found <strong>${count}</strong> matching books. Which type are you into${tail}?</p>
+        <div class="prompt-chips">${chips}</div>
+        <p class="casual">Just reply with a word or click a chip ✨</p>
+    `;
+}
+
+function attachBookHandlers(container, results) {
+    container.querySelectorAll('.book').forEach(el => {
+        const open = () => {
+            const idx = parseInt(el.dataset.idx, 10);
+            openDetail(results[idx]);
+        };
+        el.addEventListener('click', open);
+        el.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+        });
+    });
+    container.querySelectorAll('.prompt-chip').forEach(chip => {
+        chip.addEventListener('click', () => sendQuery(chip.dataset.subcat));
+    });
+}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+function openDetail(book) {
+    if (!book) return;
+    modalBody.innerHTML = `
+        <div class="modal-title">${escapeHtml(book.title)}</div>
+        <div class="modal-author">${escapeHtml(book.author)}</div>
+        <div class="modal-badges">
+            <span class="badge ${book.availability === 'borrowed' ? 'warn' : 'ok'}">${escapeHtml(book.availability)}</span>
+            <span class="badge ${book.location === 'portal' ? 'info' : ''}">${escapeHtml(book.location)}</span>
+            ${book.call_number ? `<span class="badge">${escapeHtml(book.call_number)}</span>` : ''}
+        </div>
+        <div class="modal-fields">
+            <div><span class="field-label">Category</span> ${escapeHtml(book.category)}</div>
+            <div><span class="field-label">Subcategory</span> ${escapeHtml(book.subcategory)}</div>
+            <div><span class="field-label">Difficulty</span> ${escapeHtml(book.difficulty)}</div>
+            <div><span class="field-label">Year</span> ${escapeHtml(book.year)}</div>
+            <div><span class="field-label">Match</span> ${book.score_percent}%</div>
+        </div>
+        <div class="modal-desc">
+            <div class="field-label">Description</div>
+            <p>${escapeHtml(book.description)}</p>
+        </div>
+        <div class="modal-why">
+            <div class="field-label">Why this matched</div>
+            <ul>${(book.explanation || []).map(e => `<li>${escapeHtml(e)}</li>`).join('')}</ul>
+        </div>
+    `;
+    modalBackdrop.classList.add('open');
+    modalClose.focus();
+}
+function closeModal() {
+    modalBackdrop.classList.remove('open');
+    input.focus();
+}
+modalClose.addEventListener('click', closeModal);
+modalBackdrop.addEventListener('click', e => {
+    if (e.target === modalBackdrop) closeModal();
+});
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && modalBackdrop.classList.contains('open')) closeModal();
+});
+
+/* ============================================================
+   MAIN: SEND QUERY
+   ============================================================ */
+async function sendQuery(q) {
+    if (!q) return;
+    hideWelcome();
+    addUserMessage(q);
+    input.value = '';
+    sendBtn.disabled = true;
+    pushHistory(q);
+
+    const loader = addLoadingBubble();
+
+    try {
+        const res = await fetch('/api/search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query: q, top_n: 8 })
+        });
+        const data = await res.json();
+        loader.remove();
+
+        if (data.error) {
+            addBotBubble(`⚠️ ${escapeHtml(data.error)}`);
+
+        } else if (data.casual) {
+            const html = data.reply.split('\n')
+                .map(line => line.trim() ? `<p>${escapeHtml(line)}</p>` : '')
+                .join('');
+            addBotBubble(html);
+
+        } else if (data.intent === "filtered") {
+            lastResults = data.results || [];
+            const header = `<p>Here are the <strong>${escapeHtml(data.filtered_by)}</strong> books 📚</p>`;
+            const list = renderResults({ results: data.results, preferences: {} }, true);
+            const bubbleEl = addBotBubble(header + list);
+            attachBookHandlers(bubbleEl, lastResults);
+
+        } else {
+            lastResults = data.results || [];
+            let html = renderResults(data);
+            if (data.prompt) html += renderPromptPrompt(data.prompt);
+            const bubbleEl = addBotBubble(html);
+            attachBookHandlers(bubbleEl, lastResults);
+        }
+    } catch (err) {
+        loader.remove();
+        addBotBubble('⚠️ Could not reach the server.');
+    }
+
+    sendBtn.disabled = false;
+    input.focus();
+}
+
+/* ============================================================
+   EVENTS
+   ============================================================ */
+form.addEventListener('submit', e => {
+    e.preventDefault();
+    sendQuery(input.value.trim());
+});
+
+document.querySelectorAll('.hint-chip, .welcome-card').forEach(btn => {
+    btn.addEventListener('click', () => sendQuery(btn.dataset.q));
+});
+
+/* Surprise Me */
+const SURPRISES = [
+    "beginner friendly books",
+    "psychology books",
+    "engineering books",
+    "law books",
+    "marine engineering textbook",
+    "advanced criminal law book",
+    "nursing books",
+    "computer science books"
+];
+surpriseBtn.addEventListener('click', () => {
+    const q = SURPRISES[Math.floor(Math.random() * SURPRISES.length)];
+    sendQuery(q);
+});
+
+/* Reset / New chat */
+function resetChat() {
+    messages.innerHTML = '';
+    lastResults = [];
+    showWelcome();
+    input.focus();
+    closeSidebarMobile();
+}
+resetBtn.addEventListener('click', resetChat);
+newChatBtn.addEventListener('click', resetChat);
+
+/* ============================================================
+   SIDEBAR — MOBILE (drawer) + DESKTOP (collapse)
+   ============================================================ */
+function openSidebarMobile() {
+    sidebar.classList.add('open');
+    sidebarBackdrop.classList.add('open');
+}
+function closeSidebarMobile() {
+    sidebar.classList.remove('open');
+    sidebarBackdrop.classList.remove('open');
+}
+
+menuBtn.addEventListener('click', () => {
+    if (sidebar.classList.contains('open')) {
+        closeSidebarMobile();
+    } else {
+        openSidebarMobile();
+    }
+});
+
+/* Tap the dim backdrop to close the drawer */
+sidebarBackdrop.addEventListener('click', closeSidebarMobile);
+
+/* Escape key closes the drawer */
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && sidebar.classList.contains('open')) {
+        closeSidebarMobile();
+    }
+});
+
+/* Collapse button — behaves differently on mobile vs desktop */
+collapseBtn.addEventListener('click', () => {
+    // On mobile: close the drawer
+    if (window.innerWidth <= 800) {
+        closeSidebarMobile();
+        return;
+    }
+    // On desktop: collapse to icon-only sidebar
+    const collapsed = appEl.classList.toggle('sidebar-collapsed');
+    collapseBtn.setAttribute('aria-label', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
+    collapseBtn.setAttribute('title', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
+    collapseBtn.textContent = collapsed ? '›' : '‹';
+});
+
+/* If the user resizes to desktop, reset drawer state */
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 800) closeSidebarMobile();
+});
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+renderHistory();
+showWelcome();
+input.focus();
+</script>
+
+</body>
+</html>
