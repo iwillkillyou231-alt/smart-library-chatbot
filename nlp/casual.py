@@ -28,10 +28,10 @@ WHO = ["who are you", "what are you", "your name", "who made you"]
 
 RESPONSES = {
     "greeting": [
-        "Hey there! I'm Bobet Butterbonia. Ready to help you find a good book. What topic are you into?",
-        "Hello! I'm Bobet Butterbonia. What kind of book are you looking for today?",
-        "Hi! I'm Bobet Butterbonia. Tell me what you want to learn or read about ",
-        "Hey! I'm Bobet Butterbonia. What's on your reading list today?",
+        "Hey there! I'm Book Owl. Ready to help you find a good book. What topic are you into?",
+        "Hello! I'm Book Owl. What kind of book are you looking for today?",
+        "Hi! I'm Book Owl. Tell me what you want to learn or read about ",
+        "Hey! I'm Book Owl. What's on your reading list today?",
     ],
     "casual": [
         "Of course We can just chill and talk — no school stuff, no technical explanations, no serious agenda. What's on your mind right now?",
@@ -59,7 +59,7 @@ RESPONSES = {
     ],
     
     "who": [
-        "I'm Bobet Butterbonia — a rule-based NLP assistant built to help NWU students find books by describing what they want in plain English.",
+        "I'm Book Owl — a rule-based NLP assistant built to help NWU students find books by describing what they want in plain English.",
         "I'm a book discovery chatbot for the NWU library. I use TF-IDF and cosine similarity — no AI APIs ",
     ],
 }
