@@ -1,19 +1,11 @@
 """
-normalizer.py
-Step 1 of the NLP pipeline.
-
-Purpose:
-    Convert raw user input into a clean, standardized lowercase string
-    that later steps can safely tokenize.
-
-What it does:
+What i does:
     1. Lowercases the text.
     2. Expands common English contractions.
     3. Removes punctuation (except hyphens inside words like "state-of-the-art").
     4. Collapses multiple spaces into one.
     5. Strips leading/trailing whitespace.
 
-This file is intentionally rule-based and fully explainable.
 """
 
 import re
@@ -53,10 +45,7 @@ def expand_contractions(text: str) -> str:
 
 
 def remove_punctuation(text: str) -> str:
-    """
-    Remove punctuation but keep hyphens between letters
-    (e.g., 'state-of-the-art' stays intact).
-    """
+    
     # Replace hyphens between letters with a space, then remove all other punctuation.
     # We do this so 'state-of-the-art' -> 'state of the art' and 'don't' -> 'dont'
     text = re.sub(r"(?<=\w)-(?=\w)", " ", text)
@@ -65,10 +54,7 @@ def remove_punctuation(text: str) -> str:
 
 
 def normalize(text: str) -> str:
-    """
-    Full normalization pipeline for one user input.
-    Returns a clean lowercase string.
-    """
+    
     if not isinstance(text, str):
         return ""
 

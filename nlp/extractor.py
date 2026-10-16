@@ -1,23 +1,9 @@
 """
-extractor.py
-Step 3 of the NLP pipeline.
 
 Purpose:
     Extract structured preferences from a normalized user query.
 
-What it detects:
-    1. Difficulty       -> beginner / intermediate / advanced
-    2. Author           -> matches a name against the dataset authors
-    3. Category hints   -> matches category words from the controlled vocabulary
-    4. Follow-up intent -> "easier", "harder", "more focused"
-    5. Negations        -> words that appear after "not", "no", "without"
-
-Why this matters:
-    The scorer uses these preferences as bonus signals on top of the
-    TF-IDF cosine similarity. Everything is rule-based and explainable.
-
-NOTE: `negated` is returned as a sorted LIST (not a set) so it can be
-      serialized to JSON by the web API without errors.
+      detoy met tay ano sir, about detection nu kasla "i want a book for 'nursing'" lets say sorted
 """
 
 import json
@@ -114,12 +100,9 @@ FOCUS_WORDS    = {"focused", "focus", "more", "specifically"}
 NEGATION_WORDS = {"not", "no", "without", "except", "exclude", "avoid"}
 
 
-# -------- difficulty detection --------
+#  difficulty detection 
 def detect_difficulty(tokens):
-    """
-    Return the first difficulty level whose trigger words appear in the tokens.
-    Checks beginner -> intermediate -> advanced in order.
-    """
+    
     token_set = set(tokens)
 
     for level in ("beginner", "intermediate", "advanced"):
@@ -134,10 +117,7 @@ def detect_difficulty(tokens):
 
 # -------- author detection --------
 def detect_author(raw_text, author_list):
-    """
-    Look for any dataset author whose first or last name appears in the query.
-    Returns the matched author string or None.
-    """
+    
     text = raw_text.lower()
     for full_name in author_list:
         for single in [a.strip().lower() for a in full_name.split(";")]:
@@ -153,7 +133,7 @@ def detect_author(raw_text, author_list):
 
 # -------- category detection --------
 def detect_category(tokens):
-    """Return the first controlled category whose word appears in the tokens."""
+    
     token_set = set(tokens)
     for cat in CATEGORIES:
         if cat in token_set or all(w in token_set for w in cat.split()):
@@ -163,10 +143,7 @@ def detect_category(tokens):
 
 # -------- follow-up intent --------
 def detect_followup(tokens):
-    """
-    Detect whether the query is a follow-up to a previous search.
-    Returns one of: "easier", "harder", "focused", None.
-    """
+    
     tset = set(tokens)
     if tset & EASIER_WORDS:
         return "easier"
@@ -179,16 +156,7 @@ def detect_followup(tokens):
 
 # -------- negation handling --------
 def detect_negations(raw_text, tokens):
-    """
-    Very simple negation detection: tokens that appear after
-    'not', 'no', 'without', 'except', 'avoid' are marked negative.
-
-    Handles:
-        "not horror"
-        "without onions"
-        "no spicy food"
-    Returns a set of negated tokens.
-    """
+    
     normalized = raw_text.lower()
     negated = set()
 
@@ -201,11 +169,7 @@ def detect_negations(raw_text, tokens):
 
 # -------- main entry --------
 def extract(raw_text, author_list=None):
-    """
-    Run all extractors and return a structured dict.
-
-    `negated` is returned as a sorted LIST so the result is JSON-safe.
-    """
+    
     tokens = tokenize(raw_text)
     return {
         "tokens":     tokens,

@@ -1,9 +1,4 @@
 """
-tokenizer.py
-Step 2 of the NLP pipeline.
-
-Purpose:
-    Split a normalized string into meaningful tokens and remove stopwords.
 
 What it does:
     1. Splits on whitespace.
@@ -11,9 +6,6 @@ What it does:
     3. Keeps tokens of length >= 2.
     4. Returns the token list.
 
-Why this matters:
-    Tokens are what the extractor, synonym expander, and TF-IDF modules
-    will work with. Garbage tokens produce garbage matches.
 """
 
 from nlp.normalizer import normalize
@@ -21,17 +13,7 @@ from nlp.stopwords import STOPWORDS, KEEP_WORDS
 
 
 def tokenize(text: str, keep_stopwords: bool = False) -> list:
-    """
-    Normalize then split into tokens.
-
-    Args:
-        text: raw user input
-        keep_stopwords: if True, do not remove stopwords
-                        (useful for follow-up detection later)
-
-    Returns:
-        list of tokens
-    """
+   
     normalized = normalize(text)
     raw_tokens = normalized.split()
 

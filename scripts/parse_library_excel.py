@@ -6,7 +6,6 @@ Expected Excel columns (row 1, case-insensitive):
     title, author, category, subcategory, description, keywords,
     difficulty, call_number, year, toc, availability, location
 
-Auto-added by parser: id, source
 """
 
 import csv
@@ -36,7 +35,6 @@ FINAL_COLS = ["id"] + EXPECTED_COLS + ["source"]
 
 
 def norm_header(h):
-    """Normalize header: lowercase, spaces/hyphens -> underscores."""
     if h is None:
         return ""
     return re.sub(r"[\s\-]+", "_", str(h).strip().lower())
@@ -51,7 +49,6 @@ def norm_value(v):
 
 
 def clean_keywords(raw):
-    """Turn 'subject headings' into a clean comma-separated list."""
     text = norm_value(raw).lower()
     text = re.sub(r"\b\d+\.\s*", "", text)
     parts = re.split(r"[,;\.]+", text)

@@ -1,9 +1,3 @@
-"""
-session_state.py
-Remembers the last search so the user can reply with a single word
-(e.g., "Civil") to filter results by subcategory.
-"""
-
 from flask import session
 
 
@@ -31,13 +25,7 @@ def clear_context():
 
 
 def match_subcategory(text, subcategories):
-    """
-    If the user's short reply matches one of the stored subcategories,
-    return the matched subcategory string. Otherwise None.
-
-    Uses word-prefix matching (not raw substring) to avoid false matches
-    like "hi" matching "leadersHIp".
-    """
+    
     if not text or not subcategories:
         return None
 
@@ -69,13 +57,7 @@ def match_subcategory(text, subcategories):
 
 
 def shorten_subcategories(subcategories):
-    """
-    If all subcategories share a common last word (like "Engineering"),
-    strip it out for the display prompt.
-
-    Returns: (short_list, common_word)
-        ["Civil Engineering", "Mechanical Engineering"] -> (["Civil", "Mechanical"], "Engineering")
-    """
+    
     if len(subcategories) < 2:
         return subcategories, None
 

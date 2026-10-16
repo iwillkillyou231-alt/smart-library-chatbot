@@ -1,30 +1,11 @@
-"""
-cosine.py
-Step 6 of the NLP pipeline.
-
-Purpose:
-    Compute cosine similarity between two TF-IDF vectors.
-
-Formula:
-    cos(a, b) = (a · b) / (||a|| * ||b||)
-
-Interpretation:
-    1.0 = identical direction (perfect match)
-    0.0 = no shared terms
-"""
-
 import math
 
-
 def cosine_similarity(vec_a, vec_b):
-    """
-    Cosine similarity between two dict-based sparse vectors.
-    Returns a float in [0.0, 1.0].
-    """
+   
     if not vec_a or not vec_b:
         return 0.0
 
-    # Dot product: only iterate over shared terms
+    # Dot product: only iteate over shared terms
     dot = 0.0
     for term, val_a in vec_a.items():
         val_b = vec_b.get(term)
@@ -45,11 +26,7 @@ def cosine_similarity(vec_a, vec_b):
 
 
 def shared_terms(vec_a, vec_b):
-    """
-    Return the set of terms that appear in both vectors,
-    sorted by combined weight (descending).
-    Used for explanations.
-    """
+   
     shared = []
     for term in vec_a:
         if term in vec_b:

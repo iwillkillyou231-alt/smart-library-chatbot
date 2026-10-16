@@ -1,17 +1,9 @@
 """
-scorer.py
-Step 7 of the NLP pipeline.
-
-Purpose:
-    Combine cosine similarity with rule-based bonuses to produce
-    a final score for each book. Also generate a human-readable
-    explanation of WHY a book matched.
-
-Weights (must be defended during presentation):
-    Cosine similarity .... 0.60
-    Difficulty match ..... 0.20
-    Category match ....... 0.10
-    Author match ......... 0.10
+Weights ):
+    Cosine similarity  0.60
+    Difficulty match  0.20
+    Category match  0.10
+    Author match  0.10
 """
 
 from nlp.cosine import cosine_similarity, shared_terms
@@ -24,18 +16,7 @@ WEIGHT_AUTHOR     = 0.10
 
 
 def score_book(book, query_vec, book_vec, prefs):
-    """
-    Score one book against the query.
-
-    Args:
-        book: dict — row from books.csv
-        query_vec: dict {term: tfidf} for the query
-        book_vec: dict {term: tfidf} for the book
-        prefs: dict — output of extractor.extract()
-
-    Returns:
-        (score, explanation_list)
-    """
+    
     explanation = []
 
     # ---- 1. Cosine similarity ----
@@ -90,10 +71,7 @@ def score_book(book, query_vec, book_vec, prefs):
 
 
 def rank_books(books, query_vec, book_vectors, prefs, top_n=5):
-    """
-    Score and rank all books. Returns a list of (book, score, explanation)
-    sorted by score, descending.
-    """
+   
     scored = []
     for book, book_vec in zip(books, book_vectors):
         score, explanation = score_book(book, query_vec, book_vec, prefs)

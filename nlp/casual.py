@@ -1,9 +1,5 @@
 """
-casual.py
-Rule-based casual conversation handler.
-
-Detects non-search intents and returns friendly canned responses.
-No AI used — everything is pattern-matching + templates.
+haan nga hard-coded etoy sir, wen ngem for greeings lang, good for the guide
 """
 
 import random
@@ -66,10 +62,7 @@ RESPONSES = {
 
 
 def detect_intent(tokens, raw_text):
-    """
-    Detect what kind of message this is.
-    Returns: greeting, casual, thanks, bye, help, who, or search
-    """
+    
     text = raw_text.lower()
     tset = set(tokens)
 
@@ -96,7 +89,6 @@ def detect_intent(tokens, raw_text):
 
 
 def casual_response(intent):
-    """Return a random response for the given intent."""
     if intent in RESPONSES:
         return random.choice(RESPONSES[intent])
     return None

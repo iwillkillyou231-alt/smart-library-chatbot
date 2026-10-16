@@ -1,21 +1,3 @@
-"""
-synonym_expander.py
-Step 4 of the NLP pipeline.
-
-Purpose:
-    Given a token list, add synonyms from data/synonyms.json so that
-    different phrasings of the same idea match the same books.
-
-Example:
-    tokens:  ['hacking', 'beginner']
-    expanded: ['hacking', 'beginner', 'cybersecurity', 'security',
-               'intro', 'easy', 'basic', 'fundamentals']
-
-Why this matters:
-    Without expansion, "hacking" and "cybersecurity" would be treated as
-    unrelated words even though they mean the same thing in this domain.
-"""
-
 import json
 import os
 
@@ -28,13 +10,7 @@ with open(SYNONYMS_PATH, "r", encoding="utf-8") as f:
 
 
 def expand(tokens):
-    """
-    Return a new token list that includes the original tokens plus
-    all synonyms mapped in synonyms.json.
-
-    - Preserves order (original tokens first, then new synonyms).
-    - Deduplicates.
-    """
+   
     expanded = list(tokens)
     seen = set(tokens)
 
@@ -50,7 +26,6 @@ def expand(tokens):
 
 
 def expand_string(text):
-    """Convenience: expand a raw string instead of a token list."""
     return " ".join(expand(text.lower().split()))
 
 

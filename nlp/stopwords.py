@@ -1,6 +1,6 @@
 """
-stopwords.py
-Common English stopwords + domain filler words that don't help book search.
+Common English stopwords 
+
 """
 
 STOPWORDS = {

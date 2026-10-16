@@ -69,10 +69,7 @@ class LibraryEngine:
 
     @staticmethod
     def _tokenize_for_index(text):
-        """
-        Index tokenizer: lowercases, splits, removes very short tokens.
-        Does NOT remove stopwords — TF-IDF's IDF already handles that.
-        """
+        
         import re
         text = text.lower()
         text = re.sub(r"[^\w\s]", " ", text)

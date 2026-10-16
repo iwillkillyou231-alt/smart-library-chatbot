@@ -1,13 +1,3 @@
-"""
-app.py
-Flask web server for the Smart Library Book Discovery Chatbot.
-
-Routes:
-    GET  /              -> chat UI
-    POST /api/search    -> accepts {"query": "..."} returns ranked results
-                           Also handles casual chat + subcategory filters.
-"""
-
 import os
 import sys
 
