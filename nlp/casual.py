@@ -76,7 +76,7 @@ def detect_intent(tokens, raw_text):
         if word in text or word in tset:
             return "casual"
     for word in THANKS:
-        if word in tset or word in text:
+        if word in tset:
             return "thanks"
     for word in BYE:
         if word in tset:
