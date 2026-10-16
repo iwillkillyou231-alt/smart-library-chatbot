@@ -116,8 +116,8 @@ def main():
     print(f"RESULTS: {passed}/{total} passed  ({failed} failed)")
     print("=" * 70)
 
-    # Write failure log
-    log_path = os.path.join(ROOT, "docs", "error_log.md")
+        # Write failure log
+    log_path = os.path.join(ROOT, "tests", "error_log.md")
     with open(log_path, "w", encoding="utf-8") as f:
         f.write("# Error Log — Midterm Blind Test\n\n")
         f.write(f"**Total queries:** {total}  \n")
@@ -131,6 +131,7 @@ def main():
                 f.write(f"| {fl['id']} | {fl['query']} | {fl['expected']} | {fl['top_result']} | {fl['notes']} |\n")
         else:
             f.write("_No failures._\n")
+
     print(f"📝 Failure log written to: {log_path}")
 
 

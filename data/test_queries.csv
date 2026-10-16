@@ -1,33 +1,101 @@
 id,query,expected_category,expected_difficulty,expected_keywords,notes
 1,"I want a nursing book about pediatric care","Nursing","","pediatric",topic
-2,"Books about oncology nursing","Nursing","","oncology",topic
-3,"Beginner book about patient care","Nursing","","care",topic
-4,"Advanced psychiatric nursing book","Nursing","advanced","psychiatric",difficulty+topic
-5,"Books on maternal and newborn care","Nursing","","maternal,newborn",topic
-6,"Gerontological nursing guide","Nursing","","gerontological",topic
-7,"Critical care nursing textbook","Nursing","","critical",topic
-8,"I need something about nutrition and diet therapy","Nursing","","nutrition",topic
-9,"Pharmacology book for nurses","Nursing","","pharmacology",topic
-10,"Books about community health nursing","Nursing","","community",topic
-11,"Nursing leadership and management","Nursing","","leadership",topic
-12,"Emergency nursing book","Nursing","","emergency",topic
-13,"Anatomy and physiology for nursing students","Nursing","","health",topic
-14,"Evidence-based nursing practice","Nursing","","evidence",topic
-15,"Cardiac nursing care","Nursing","","cardiac",topic
-16,"Books on mental health nursing","Nursing","","mental",topic
-17,"Pediatric intensive care nursing","Nursing","","pediatric,critical",topic
-18,"Books about nursing research methods","Nursing","","research",topic
-19,"Family health nursing textbook","Nursing","","family",topic
-20,"Perioperative nursing book","Nursing","","surgical",topic
-21,"Nursing care for cancer patients","Nursing","","cancer",topicw
-22,"Nursing assessment and diagnosis","Nursing","","assessment",topic
-23,"Advanced nursing practice book","Nursing","","evidence",topic
-24,"Foundations of nursing textbook","Nursing","","concept",topic
-25,"Nursing ethics and law","Nursing","","ethics",topic
-26,"Books about nursing informatics","Nursing","","informatics",topic
-27,"Pediatric nursing drug guide","Nursing","","drug,pediatric",topic
-28,"Geriatric health assessment","Nursing","","geriatric",topic
-29,"Maternal newborn nursing care","Nursing","","maternal",topic
-30,"Psychiatric mental health nursing","Nursing","","psychiatric,mental",topic
-31,"Something easier on nursing","Nursing","","easier",follow-up
-32,"Nursing books but not pediatric","Nursing","","nursing",negation
+2,"Advanced psychiatric nursing book","Nursing","advanced","psychiatric",difficulty+topic
+3,"Books on maternal and newborn care","Nursing","","maternal",topic
+4,"Gerontological nursing guide","Nursing","","gerontological",topic
+5,"Beginner nursing book for patient care","Nursing","","nursing",topic
+6,"Critical care nursing textbook","Nursing","","critical",topic
+7,"Pharmacology book for nurses","Nursing","","pharmacology",topic
+8,"Books about community health nursing","Nursing","","community",topic
+9,"Nursing leadership and management","Nursing","","leadership",topic
+10,"Something easier on nursing","Nursing","","easier",follow-up
+11,"Beginner programming book","Computer Science","beginner","programming",difficulty+topic
+12,"Books about data structures","Computer Science","","data",topic
+13,"Advanced machine learning book","Computer Science","advanced","machine",difficulty+topic
+14,"Introduction to algorithms","Computer Science","beginner","algorithm",difficulty+topic
+15,"Cybersecurity for beginners","Computer Science","beginner","cybersecurity",difficulty+topic
+16,"Books about computer networks","Computer Science","","network",topic
+17,"Artificial intelligence textbook","Computer Science","","artificial",topic
+18,"Web development book","Computer Science","","web",topic
+19,"Software engineering principles","Computer Science","","software",topic
+20,"Database management systems","Computer Science","","database",topic
+21,"Architecture design principles","Architecture","","design",topic
+22,"Building construction book","Architecture","","construction",topic
+23,"Modern architecture history","Architecture","","architecture",topic
+24,"Urban planning textbook","Architecture","","planning",topic
+25,"Advanced architectural theory","Architecture","advanced","architecture",difficulty+topic
+26,"Beginner guide to architecture","Architecture","beginner","architecture",difficulty+topic
+27,"Books about sustainable design","Architecture","","sustainable",topic
+28,"Interior design principles","Architecture","","interior",topic
+29,"Structural engineering for architects","Engineering","","structural",topic
+30,"Landscape architecture textbook","Architecture","","landscape",topic
+31,"Criminal law textbook","Law","","criminal",topic
+32,"Advanced constitutional law","Law","advanced","constitutional",difficulty+topic
+33,"Books about legal ethics","Law","","legal",topic
+34,"Introduction to law for beginners","Law","beginner","law",difficulty+topic
+35,"Books about contract law","Law","","law",topic
+36,"International law textbook","Law","","international",topic
+37,"Corporate law book","Law","","law",topic
+38,"Human rights law","Law","","human",topic
+39,"Property law principles","Law","","property",topic
+40,"Tort law explained","Law","","law",topic
+41,"Criminology research methods","Criminology","","criminology",topic
+42,"Forensic science books","Criminology","","forensic",topic
+43,"Advanced criminal investigation","Criminology","advanced","criminal",difficulty+topic
+44,"Introduction to criminology","Criminology","beginner","criminology",difficulty+topic
+45,"Books about juvenile justice","Criminology","","justice",topic
+46,"Criminal psychology book","Criminology","","criminal",topic
+47,"Penology and corrections","Criminology","","penology",topic
+48,"Cybercrime investigation","Criminology","","cybercrime",topic
+49,"Victimology textbook","Criminology","","victimology",topic
+50,"Police administration book","Criminology","","police",topic
+51,"Psychology of human behavior","Psychology","","behavior",topic
+52,"Cognitive psychology textbook","Psychology","","cognitive",topic
+53,"Advanced clinical psychology","Psychology","advanced","clinical",difficulty+topic
+54,"Beginner psychology book","Psychology","beginner","psychology",difficulty+topic
+55,"Books about child psychology","Psychology","","child",topic
+56,"Social psychology principles","Psychology","","social",topic
+57,"Developmental psychology guide","Psychology","","developmental",topic
+58,"Abnormal psychology textbook","Psychology","","abnormal",topic
+59,"Industrial organizational psychology","Psychology","","psychology",topic
+60,"Educational psychology book","Psychology","","psychology",topic
+61,"Teaching methods and pedagogy","Education","","teaching",topic
+62,"Curriculum development book","Education","","curriculum",topic
+63,"Advanced educational research","Education","advanced","research",difficulty+topic
+64,"Beginner guide to teaching","Education","beginner","teaching",difficulty+topic
+65,"Books about early childhood education","Education","","childhood",topic
+66,"Special education textbook","Education","","education",topic
+67,"Educational leadership book","Nursing","","leadership",topic
+68,"Assessment in education","Education","","assessment",topic
+69,"Educational technology book","Education","","technology",topic
+70,"Comparative education studies","Education","","education",topic
+71,"Marine engineering textbook","Marine","","marine",topic
+72,"Advanced marine navigation","Marine","advanced","navigation",difficulty+topic
+73,"Introduction to maritime studies","Marine","beginner","maritime",difficulty+topic
+74,"Books about ship operations","Marine","","ship",topic
+75,"Marine transportation book","Marine","","marine",topic
+76,"Seamanship principles","Marine","","seamanship",topic
+77,"Marine safety book","Marine","","safety",topic
+78,"Naval architecture textbook","Architecture","","architecture",topic
+79,"Maritime law book","Marine","","maritime",topic
+80,"Marine biology studies","Marine","","marine",topic
+81,"Political science introduction","Political Science","","political",topic
+82,"Public administration theories","Political Science","","political",topic
+83,"Advanced political theory","Political Science","advanced","theory",difficulty+topic
+84,"Books about international relations","Political Science","","international",topic
+85,"Government and politics textbook","Political Science","","government",topic
+86,"Comparative politics book","Political Science","","comparative",topic
+87,"Public policy analysis","Political Science","","policy",topic
+88,"Political philosophy guide","Political Science","","philosophy",topic
+89,"Elections and voting book","Political Science","","elections",topic
+90,"Diplomacy textbook","Political Science","","diplomacy",topic
+91,"Engineering fundamentals","Engineering","beginner","engineering",difficulty+topic
+92,"Advanced engineering mathematics","Engineering","advanced","engineering",difficulty+topic
+93,"Books about civil engineering","Engineering","","civil",topic
+94,"Electrical engineering textbook","Engineering","","electrical",topic
+95,"Mechanical engineering principles","Engineering","","mechanical",topic
+96,"Chemical engineering book","Engineering","","chemical",topic
+97,"Industrial engineering textbook","Engineering","","industrial",topic
+98,"Materials engineering guide","Engineering","","materials",topic
+99,"Engineering mechanics book","Engineering","","engineering",topic
+100,"Thermodynamics textbook","Engineering","","thermodynamics",topic

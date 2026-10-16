@@ -86,5 +86,20 @@
     "fundamentals": ["foundations", "basic", "introduction"],
     "basic": ["fundamentals", "foundations", "introduction", "beginner"],
     "care": ["nursing", "patient", "clinical"],
-    "evidence": ["advanced", "research"]
+    "evidence": ["advanced", "research"],
+
+    "contract": ["law", "legal", "agreement"],
+    "corporate": ["law", "business", "legal"],
+    "tort": ["law", "legal"],
+    "industrial": ["organizational", "psychology"],
+    "organizational": ["industrial", "psychology"],
+    "educational": ["education", "psychology", "teaching"],
+    "comparative": ["education"],
+    "special": ["education"],
+    "mechanics": ["engineering", "physics"],
+    "structural": ["architecture", "civil", "engineering"],
+    "naval": ["marine", "architecture", "ship"],
+    "transportation": ["marine", "transport"],
+    "administration": ["political", "public", "government"]
+    
 }

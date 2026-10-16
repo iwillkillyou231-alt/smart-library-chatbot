@@ -1,6 +1,5 @@
 Flask
 Flask-Cors
 python-dotenv
-openai
 openpyxl
 gunicorn
