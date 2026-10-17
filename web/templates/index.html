@@ -469,6 +469,16 @@ document.addEventListener('keydown', e => {
    ============================================================ */
 async function sendQuery(q) {
     if (!q) return;
+
+    if (typeof isValidLibrarySearch === 'function' && !isValidLibrarySearch(q)) {
+        hideWelcome();
+        addUserMessage(q);
+        addBotBubble('<p>I didn\'t quite catch that. Could you tell me what book or topic you\'re looking for? 📚</p>');
+        input.value = '';
+        input.focus();
+        return;
+    }
+
     hideWelcome();
     addUserMessage(q);
     input.value = '';

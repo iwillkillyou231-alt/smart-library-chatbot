@@ -69,17 +69,13 @@ def score_book(book, query_vec, book_vec, prefs):
 
 
 def rank_books(books, query_vec, book_vectors, prefs, top_n=5):
-   
     scored = []
     for book, book_vec in zip(books, book_vectors):
         score, explanation = score_book(book, query_vec, book_vec, prefs)
         scored.append((book, score, explanation))
-    scored.sort(key=lambda x: x[1], reverse=True)
-    return scored[:top_n]
-
+    
     scored.sort(key=lambda x: x[1], reverse=True)
     
-    # Remove hard-rejected books (score 0.0)
-    scored = [s for s in scored if s[1] > 0.0]
+    filtered = [s for s in scored if s[1] > 0.0]
     
-    return scored[:top_n]
+    return filtered[:top_n]
