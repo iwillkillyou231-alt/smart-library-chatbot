@@ -50,19 +50,17 @@ def score_book(book, query_vec, book_vec, prefs):
             total += WEIGHT_AUTHOR
             explanation.append(f"Author matched: {book['author']}")
 
-    # ---- 5. Negation penalty ----
-    negated = prefs.get("negated", set())
+       # 5. Negation handling (HARD REJECT)
+    negated = prefs.get("negated") or set()
     if negated:
         book_text = " ".join([
-            book.get("title", ""),
-            book.get("description", ""),
-            book.get("keywords", ""),
-            book.get("subcategory", ""),
+            book.get("title", ""), book.get("description", ""),
+            book.get("keywords", ""), book.get("subcategory", ""),
         ]).lower()
         hits = [w for w in negated if w in book_text]
         if hits:
-            total -= 0.30
-            explanation.append(f"Excluded terms present: {', '.join(hits)}")
+            # If a negated word is in the book, reject it completely
+            return 0.0, [f"Excluded (negated): {', '.join(hits)}"]
 
     # clamp
     if total < 0:
@@ -77,4 +75,11 @@ def rank_books(books, query_vec, book_vectors, prefs, top_n=5):
         score, explanation = score_book(book, query_vec, book_vec, prefs)
         scored.append((book, score, explanation))
     scored.sort(key=lambda x: x[1], reverse=True)
+    return scored[:top_n]
+
+    scored.sort(key=lambda x: x[1], reverse=True)
+    
+    # Remove hard-rejected books (score 0.0)
+    scored = [s for s in scored if s[1] > 0.0]
+    
     return scored[:top_n]

@@ -153,9 +153,42 @@ def detect_followup(tokens):
         return "focused"
     return None
 
-
-# -------- negation handling --------
 def detect_negations(raw_text, tokens):
+    """
+    Detect negated terms. Handles:
+    - "not nursing"
+    - "i dont want nursing"
+    - "not looking for nursing"
+    """
+    text = raw_text.lower()
+    # Fix common missing-apostrophe typos
+    text = text.replace("dont", "do not").replace("doesnt", "does not")
+    words = text.split()
+    
+    negated = set()
+    negation_cues = {"not", "no", "without", "except", "avoid"}
+    stop_words = {
+        "want", "need", "like", "looking", "for", "any", 
+        "the", "a", "an", "some", "books", "book", "please", "i"
+    }
+    
+    skip_until = -1
+    for i, word in enumerate(words):
+        if i <= skip_until:
+            continue
+        
+        if word in negation_cues:
+            # Look ahead up to 5 words to find the actual target
+            for j in range(i + 1, min(i + 5, len(words))):
+                next_word = words[j]
+                if next_word in negation_cues:
+                    break
+                if next_word not in stop_words:
+                    negated.add(next_word)
+                    skip_until = j  # Skip past this word
+                    break
+                    
+    return negated
     
     normalized = raw_text.lower()
     negated = set()
@@ -165,6 +198,7 @@ def detect_negations(raw_text, tokens):
         negated.add(match)
 
     return negated
+
 
 
 # -------- main entry --------
