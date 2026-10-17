@@ -496,6 +496,12 @@ async function sendQuery(q) {
         const data = await res.json();
         loader.remove();
 
+        if (!data.casual && (!data.results || data.results.length === 0)) {
+            history = history.filter(h => h !== q);
+            saveHistory();
+            renderHistory();
+        }
+
         if (data.error) {
             addBotBubble(`⚠️ ${escapeHtml(data.error)}`);
 
