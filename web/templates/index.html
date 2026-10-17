@@ -217,20 +217,37 @@ const SHORT_VALID = new Set([
 
 function isValidLibrarySearch(message) {
     if (!message) return false;
+    
     const text = message.trim().toLowerCase();
     if (!text) return false;
+    
+    // 1. Block exact casual words (hi, thanks, ok, etc.)
     if (CASUAL_EXACT.has(text)) return false;
+    
+    // 2. Allow specific short words (law, ai, cs, etc.)
     if (SHORT_VALID.has(text)) return true;
-    if (text.length < 4) return false;
+    
+    // 3. Block if there are NO letters at all (e.g. "123", "!@#", "123!@#")
     if (!/[a-z]/.test(text)) return false;
+
+    // 4. Strip out ALL numbers, symbols, and punctuation
+    const lettersOnly = text.replace(/[^a-z\s]/g, '').trim();
+    
+    // 5. Block if there isn't at least 3 letters left
+    // (e.g., "a1b2" becomes "ab" -> blocked)
+    if (lettersOnly.length < 3) return false;
+
+    // 6. Block if the remaining text is just filler words
     const fillers = new Set([
         "the","a","an","is","are","for","about","i","want","need",
         "looking","find","show","me","please","can","you","give",
         "some","what","how","why","when","who","where","have"
     ]);
-    const meaningful = text.split(/\s+/).filter(w =>
+    
+    const meaningful = lettersOnly.split(/\s+/).filter(w =>
         w.length >= 3 && !fillers.has(w) && !CASUAL_EXACT.has(w)
     );
+    
     return meaningful.length > 0;
 }
 
