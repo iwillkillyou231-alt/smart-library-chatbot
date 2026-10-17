@@ -420,9 +420,6 @@ function attachBookHandlers(container, results) {
     });
 }
 
-/* ============================================================
-   MODAL
-   ============================================================ */
 function openDetail(book) {
     if (!book) return;
     modalBody.innerHTML = `
@@ -464,9 +461,8 @@ document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && modalBackdrop.classList.contains('open')) closeModal();
 });
 
-/* ============================================================
-   MAIN: SEND QUERY
-   ============================================================ */
+/* = MAIN: SEND QUERY ==== */
+
 async function sendQuery(q) {
     if (!q) return;
 
@@ -534,9 +530,7 @@ async function sendQuery(q) {
     input.focus();
 }
 
-/* ============================================================
-   EVENTS
-   ============================================================ */
+/* - EVENTS = */
 form.addEventListener('submit', e => {
     e.preventDefault();
     sendQuery(input.value.trim());
@@ -573,9 +567,6 @@ function resetChat() {
 resetBtn.addEventListener('click', resetChat);
 newChatBtn.addEventListener('click', resetChat);
 
-/* ============================================================
-   SIDEBAR — MOBILE (drawer) + DESKTOP (collapse)
-   ============================================================ */
 function openSidebarMobile() {
     sidebar.classList.add('open');
     sidebarBackdrop.classList.add('open');
