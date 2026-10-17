@@ -252,7 +252,7 @@ function isValidLibrarySearch(message) {
 }
 
 let history = JSON.parse(localStorage.getItem('libraryHistory') || '[]')
-    .filter(q => typeof q === 'string' && isValidLibrarySearch(q));
+    .filter(q => typeof q === 'string' && isValidLibrarySearch(q) && !CASUAL_EXACT.has(q.toLowerCase()));
 let lastResults = [];
 
 function saveHistory() { localStorage.setItem('libraryHistory', JSON.stringify(history)); }
