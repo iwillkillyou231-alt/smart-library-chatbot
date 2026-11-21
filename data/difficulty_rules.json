@@ -8,10 +8,10 @@
     "intermediate", "medium", "moderate", "mid-level",
     "some experience", "practical", "hands-on"
   ],
-  "advanced": [
+    "advanced": [
     "advanced", "expert", "in-depth", "research", "graduate",
-    "specialized", "state of the art", "cutting edge", "deep dive",
-    "comprehensive", "definitive"
+    "specialized", "comprehensive", "definitive", "handbook",
+    "encyclopedia", "quantum", "differential", "hardest", "hard", "difficult", "complex"
   ],
   "default": "intermediate"
 }

@@ -50,16 +50,17 @@ def score_book(book, query_vec, book_vec, prefs):
             total += WEIGHT_AUTHOR
             explanation.append(f"Author matched: {book['author']}")
 
-       # 5. Negation handling (HARD REJECT)
+    # 5. Negation handling (HARD REJECT)
     negated = prefs.get("negated") or set()
     if negated:
         book_text = " ".join([
             book.get("title", ""), book.get("description", ""),
             book.get("keywords", ""), book.get("subcategory", ""),
         ]).lower()
+        
+        # If the negated word is in the book, reject it instantly
         hits = [w for w in negated if w in book_text]
         if hits:
-            # If a negated word is in the book, reject it completely
             return 0.0, [f"Excluded (negated): {', '.join(hits)}"]
 
     # clamp
