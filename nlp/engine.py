@@ -18,6 +18,8 @@ from nlp.extractor import extract
 from nlp.synonym_expander import expand
 from nlp.tfidf import build_vocabulary, compute_idf, tfidf_vector
 from nlp.scorer import rank_books
+from nlp.spell_corrector import correct_spelling
+
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -80,8 +82,28 @@ class LibraryEngine:
         # 1. Extract preferences
         prefs = extract(query, self.authors)
 
+        # --- NEW: Check for Exact Title Match (Issue #5) ---
+        exact_matches = [
+            b for b in self.books 
+            if b['title'].strip().lower() == query.strip().lower()
+        ]
+        if exact_matches:
+            return {
+                "query": query,
+                "preferences": prefs,
+                "expanded_tokens": [],
+                "results": [(exact_matches[0], 1.0, ["Exact title match"])]
+            }
+
+        # --- NEW: Override top_n if the user asked for a specific number or "all" ---
+        if prefs.get("limit"):
+            top_n = prefs["limit"]
+
+        # --- NEW: Correct Spelling (Issue #1) ---
+        corrected_tokens = correct_spelling(prefs["tokens"])
+
         # 2. Expand query tokens with synonyms
-        expanded = expand(prefs["tokens"])
+        expanded = expand(corrected_tokens)
 
         # 3. Build query vector using the same idf + vocabulary
         query_vec = tfidf_vector(expanded, self.idf, self.vocabulary)

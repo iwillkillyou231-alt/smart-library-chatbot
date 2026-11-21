@@ -16,7 +16,6 @@ WEIGHT_AUTHOR     = 0.10
 
 
 def score_book(book, query_vec, book_vec, prefs):
-    
     explanation = []
 
     # ---- 1. Cosine similarity ----
@@ -32,11 +31,8 @@ def score_book(book, query_vec, book_vec, prefs):
             total += WEIGHT_DIFFICULTY
             explanation.append(f"Difficulty matched: {book['difficulty']}")
         else:
-            # small penalty if difficulty explicitly contradicts
             total -= WEIGHT_DIFFICULTY * 0.5
-            explanation.append(
-                f"Difficulty mismatch (wanted {prefs['difficulty']}, got {book['difficulty']})"
-            )
+            explanation.append(f"Difficulty mismatch (wanted {prefs['difficulty']}, got {book['difficulty']})")
 
     # ---- 3. Category match ----
     if prefs.get("category") and book.get("category"):
@@ -53,17 +49,19 @@ def score_book(book, query_vec, book_vec, prefs):
     # 5. Negation handling (HARD REJECT)
     negated = prefs.get("negated") or set()
     if negated:
+        # ADDED "category" here to ensure nursing books are rejected!
         book_text = " ".join([
-            book.get("title", ""), book.get("description", ""),
-            book.get("keywords", ""), book.get("subcategory", ""),
+            book.get("title", ""), 
+            book.get("description", ""),
+            book.get("keywords", ""), 
+            book.get("subcategory", ""),
+            book.get("category", ""), # <--- THIS FIXES NURSING
         ]).lower()
         
-        # If the negated word is in the book, reject it instantly
         hits = [w for w in negated if w in book_text]
         if hits:
             return 0.0, [f"Excluded (negated): {', '.join(hits)}"]
 
-    # clamp
     if total < 0:
         total = 0.0
     return total, explanation
@@ -77,6 +75,11 @@ def rank_books(books, query_vec, book_vectors, prefs, top_n=5):
     
     scored.sort(key=lambda x: x[1], reverse=True)
     
-    filtered = [s for s in scored if s[1] > 0.0]
+    # NEW: If they ask for a huge number (like 500), don't filter out 0.0 scores.
+    # Otherwise, keep the filter so we don't show irrelevant books.
+    if top_n >= 100:
+        filtered = scored
+    else:
+        filtered = [s for s in scored if s[1] > 0.0]
     
     return filtered[:top_n]

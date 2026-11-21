@@ -466,7 +466,10 @@ document.addEventListener('keydown', e => {
 async function sendQuery(q) {
     if (!q) return;
 
-    if (typeof isValidLibrarySearch === 'function' && !isValidLibrarySearch(q)) {
+    const text = q.trim().toLowerCase();
+
+    // NEW: Allow casual words (hi, thanks) to pass through to the backend!
+    if (!CASUAL_EXACT.has(text) && typeof isValidLibrarySearch === 'function' && !isValidLibrarySearch(q)) {
         hideWelcome();
         addUserMessage(q);
         addBotBubble('<p>I didn\'t quite catch that. Could you tell me what book or topic you\'re looking for? 📚</p>');
@@ -479,7 +482,11 @@ async function sendQuery(q) {
     addUserMessage(q);
     input.value = '';
     sendBtn.disabled = true;
-    pushHistory(q);
+
+    // NEW: Only save to search history if it's an actual book search (don't save "hi")
+    if (isValidLibrarySearch(q)) {
+        pushHistory(q);
+    }
 
     const loader = addLoadingBubble();
 
@@ -487,7 +494,8 @@ async function sendQuery(q) {
         const res = await fetch('/api/search', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query: q, top_n: 8 })
+            // NEW: Removed top_n: 8 here! We let the Python extractor decide the limit.
+            body: JSON.stringify({ query: q }) 
         });
         const data = await res.json();
         loader.remove();

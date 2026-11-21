@@ -42,6 +42,33 @@ def search():
         if not query:
             return jsonify({"error": "Empty query"}), 400
 
+        # --- NEW: Handle "how many books" question ---
+        query_lower = query.lower()
+        if "how many" in query_lower and "book" in query_lower:
+            return jsonify({
+                "query": query,
+                "intent": "casual",
+                "casual": True,
+                "reply": f"There are exactly {len(engine.books)} books in our library database right now!",
+                "results": [],
+                "preferences": {}
+            })
+
+        # --- NEW: Handle out-of-scope questions (weather, time, etc) ---
+        out_of_scope = ["weather", "time is it", "date", "joke", "food", "movie", "sports", "basketball"]
+        if any(word in query_lower for word in out_of_scope):
+            return jsonify({
+                "query": query,
+                "intent": "casual",
+                "casual": True,
+                "reply": "I'm just a library assistant, so I don't know about that! But I can help you find a book about any topic.",
+                "results": [],
+                "preferences": {}
+            })
+
+        # -------- 1. Is this a subcategory filter reply? --------
+        ctx = get_context()
+
         # -------- 1. Is this a subcategory filter reply? --------
         ctx = get_context()
         if ctx["waiting"] and ctx["subcategories"]:

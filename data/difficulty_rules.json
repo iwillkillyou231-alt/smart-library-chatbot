@@ -9,9 +9,7 @@
     "some experience", "practical", "hands-on"
   ],
     "advanced": [
-    "advanced", "expert", "in-depth", "research", "graduate",
-    "specialized", "comprehensive", "definitive", "handbook",
-    "encyclopedia", "quantum", "differential", "hardest", "hard", "difficult", "complex"
+      "advanced", "expert", "in-depth", "hardest", "hard", "difficult", "complex", "specialized", "research", "comprehensive"
   ],
   "default": "intermediate"
 }
