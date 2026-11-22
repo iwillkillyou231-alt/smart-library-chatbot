@@ -1,5 +1,6 @@
 import csv
 import os
+import re
 
 from nlp.extractor import extract
 from nlp.synonym_expander import expand
@@ -10,7 +11,6 @@ from nlp.spell_corrector import correct_spelling
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_DATA = os.path.join(BASE_DIR, "data", "books.csv")
 
-# FIXED: changed "call number" to "call_number"
 SEARCH_FIELDS = ["title", "author", "category", "subcategory",
                  "description", "keywords", "toc", "call_number"]
 
@@ -51,7 +51,6 @@ class LibraryEngine:
 
     @staticmethod
     def _tokenize_for_index(text):
-        import re
         text = text.lower()
         text = re.sub(r"[^\w\s]", " ", text)
         return [t for t in text.split() if len(t) >= 2]
@@ -61,14 +60,15 @@ class LibraryEngine:
         # 1. Extract preferences
         prefs = extract(query, self.authors)
 
-                # --- 1. Check for Exact Call Number Match ---
+        # --- 1. Check for Exact Call Number Match ---
         if prefs.get("call_number"):
-            target_cn = prefs["call_number"].replace(" ", "").lower()
+            # Strip EVERYTHING except letters and numbers (removes spaces, dots, dashes)
+            target_cn = re.sub(r'[^a-z0-9]', '', prefs["call_number"].lower())
             print(f"DEBUG: Looking for call number -> '{target_cn}'")
             
             exact_call = [
                 b for b in self.books 
-                if b.get('call_number', '').replace(" ", "").lower() == target_cn
+                if re.sub(r'[^a-z0-9]', '', b.get('call_number', '').lower()) == target_cn
             ]
             
             if exact_call:
@@ -81,7 +81,7 @@ class LibraryEngine:
                 }
             else:
                 print("DEBUG: NOT FOUND IN CSV")
-                # NEW: If they search for a call number and it's wrong, return NOTHING.
+                # If they search for a call number and it's wrong, return NOTHING.
                 return {
                     "query": query,
                     "preferences": prefs,

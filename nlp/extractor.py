@@ -84,35 +84,47 @@ def detect_negations(raw_text):
 
 def detect_limit(raw_text):
     text = raw_text.lower()
+    
+    # If they are asking for a call number, IGNORE numbers in the query
     if "call number" in text or "call no" in text:
         return None
+        
     if "all" in text or "whole" in text:
         return 500 
         
+    # Only grab numbers that are completely standalone
     numbers = re.findall(r'(?<![a-zA-Z])\b\d+\b(?![a-zA-Z])', text)
     if numbers:
         num = int(numbers[0])
-        if 1900 <= num <= 2099: # Ignore years
+        # If the number is a year (1900-2099), DO NOT treat it as a limit!
+        if 1900 <= num <= 2099:
             return None
         return num
+        
     return None
 
 def detect_year(raw_text):
     text = raw_text.lower()
+    # Look specifically for a 4-digit year
     match = re.search(r'\b(19\d{2}|20\d{2})\b', text)
     if match:
         return match.group(1)
     return None
 
 def detect_call_number(raw_text):
-    text = raw_text.lower()
-    # Grab everything after "call number"
-    match = re.search(r'(?:call number|call no)[:\s]+([a-z0-9\.\s]+)', text)
+    text = raw_text.lower().strip()
+    
+    # 1. If they explicitly typed "call number" or "call no"
+    match = re.search(r'(?:call number|call no)[:\s]+(.*)', text)
     if match:
         return match.group(1).strip().strip('?.,!')
     
-    # Also try to catch a standalone call number (like "BF181 .V3")
-    match2 = re.search(r'\b([a-z]{1,3}\d+(?:\.\d+)?(?:\s+[a-z]\d+)?)\b', text)
+    # 2. If they just typed the call number directly (e.g., "bf 76.5 .f54")
+    if re.match(r'^[a-z]{1,3}\s*\d+', text):
+        return text
+        
+    # 3. Look for it in the middle of a sentence
+    match2 = re.search(r'\b([a-z]{1,3}\s*\d+(?:\.\d+)?(?:\s*\.?\s*[a-z]\d*)?)\b', text)
     if match2:
         return match2.group(1).strip()
         
