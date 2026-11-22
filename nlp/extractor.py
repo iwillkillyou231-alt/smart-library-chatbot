@@ -111,15 +111,31 @@ def detect_year(raw_text):
         return match.group(1)
     return None
 
+def detect_call_number(raw_text):
+    text = raw_text.lower()
+    # Look for "call number" or "call no" and grab everything after it
+    match = re.search(r'(?:call number|call no)\s+([a-z0-9\.\s]+)', text)
+    if match:
+        # Clean up the result (remove trailing punctuation)
+        return match.group(1).strip().strip('?.,!')
+    
+    # Also try to catch a standalone call number pattern (e.g., BF181 .V3)
+    match2 = re.search(r'\b([a-z]{1,3}\d+(?:\.\d+)?(?:\s+[a-z]\d+)?)\b', text)
+    if match2:
+        return match2.group(1).strip()
+        
+    return None
+
 def extract(raw_text, author_list=None):
     tokens = tokenize(raw_text)
     return {
-        "tokens":     tokens,
-        "difficulty": detect_difficulty(tokens),
-        "author":     detect_author(raw_text, author_list or []),
-        "category":   detect_category(tokens),
-        "followup":   detect_followup(tokens),
-        "negated":    sorted(detect_negations(raw_text)),
-        "limit":      detect_limit(raw_text),
-        "year":       detect_year(raw_text),
+        "tokens":      tokens,
+        "difficulty":  detect_difficulty(tokens),
+        "author":      detect_author(raw_text, author_list or []),
+        "category":    detect_category(tokens),
+        "followup":    detect_followup(tokens),
+        "negated":     sorted(detect_negations(raw_text)),
+        "limit":       detect_limit(raw_text),
+        "year":        detect_year(raw_text),
+        "call_number": detect_call_number(raw_text), # <-- ADD THIS
     }

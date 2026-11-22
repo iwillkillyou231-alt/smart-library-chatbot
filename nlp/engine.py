@@ -95,19 +95,21 @@ class LibraryEngine:
                 "results": [(exact_matches[0], 1.0, ["Exact title match"])]
             }
 
-                # --- NEW: Check for Exact Call Number Match ---
-        # e.g., if user types "BF181 .V3"
-        exact_call = [
-            b for b in self.books 
-            if b.get('call_number', '').strip().lower() == query.strip().lower()
-        ]
-        if exact_call:
-            return {
-                "query": query,
-                "preferences": prefs,
-                "expanded_tokens": [],
-                "results": [(exact_call[0], 1.0, ["Exact call number match"])]
-            }
+                     # --- NEW: Check for Exact Call Number Match ---
+        if prefs.get("call_number"):
+            # Remove spaces and lowercase both for a fair comparison
+            target_cn = prefs["call_number"].replace(" ", "").lower()
+            exact_call = [
+                b for b in self.books 
+                if b.get('call_number', '').replace(" ", "").lower() == target_cn
+            ]
+            if exact_call:
+                return {
+                    "query": query,
+                    "preferences": prefs,
+                    "expanded_tokens": [],
+                    "results": [(exact_call[0], 1.0, ["Exact call number match"])]
+                }
 
         # --- NEW: Override top_n if the user asked for a specific number or "all" ---
         if prefs.get("limit"):
