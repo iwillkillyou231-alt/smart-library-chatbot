@@ -119,15 +119,28 @@ def detect_call_number(raw_text):
     if match:
         return match.group(1).strip().strip('?.,!')
     
-    # 2. If they just typed the call number directly (e.g., "bf 76.5 .f54")
+    # Common English words that look like 1-3 letter prefixes but aren't
+    ignore_words = {
+        "all", "top", "get", "can", "you", "the", "any", "how", "few", 
+        "one", "two", "show", "send", "give", "find", "need", "want", 
+        "for", "and", "but", "not", "out", "new", "old", "use", "has", 
+        "had", "did", "was", "are", "our", "who", "why", "what", "when", 
+        "where", "book", "books", "may", "see", "let", "put", "say"
+    }
+
+    # 2. If they just typed the call number directly (e.g., "vm 145 h6 2019")
     if re.match(r'^[a-z]{1,3}\s*\d+', text):
-        return text
-        
+        prefix = text.split()[0]
+        if prefix not in ignore_words:
+            return text
+            
     # 3. Look for it in the middle of a sentence
     match2 = re.search(r'\b([a-z]{1,3}\s*\d+(?:\.\d+)?(?:\s*\.?\s*[a-z]\d*)?)\b', text)
     if match2:
-        return match2.group(1).strip()
-        
+        prefix = match2.group(1).split()[0]
+        if prefix not in ignore_words:
+            return match2.group(1).strip()
+            
     return None
 
 def extract(raw_text, author_list=None):
