@@ -81,9 +81,9 @@ def rank_books(books, query_vec, book_vectors, prefs, top_n=5):
     
     scored.sort(key=lambda x: x[1], reverse=True)
     
-    # NEW: If they ask for a huge number (like 500), don't filter out 0.0 scores.
-    # Otherwise, keep the filter so we don't show irrelevant books.
-    if top_n >= 100:
+    # NEW: If the user asked for a specific limit (like "10 books" or "300 books"),
+    # OR if they asked for a huge number, bypass the score filter.
+    if prefs.get("limit") or top_n >= 100:
         filtered = scored
     else:
         filtered = [s for s in scored if s[1] > 0.0]

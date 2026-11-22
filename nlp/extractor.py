@@ -105,7 +105,6 @@ def detect_limit(raw_text):
 
 def detect_year(raw_text):
     text = raw_text.lower()
-    # Look specifically for a 4-digit year
     match = re.search(r'\b(19\d{2}|20\d{2})\b', text)
     if match:
         return match.group(1)
@@ -119,13 +118,15 @@ def detect_call_number(raw_text):
     if match:
         return match.group(1).strip().strip('?.,!')
     
-    # Common English words that look like 1-3 letter prefixes but aren't
+    # Massive list of words that might be followed by a number, but are NOT call numbers
     ignore_words = {
-        "all", "top", "get", "can", "you", "the", "any", "how", "few", 
-        "one", "two", "show", "send", "give", "find", "need", "want", 
-        "for", "and", "but", "not", "out", "new", "old", "use", "has", 
-        "had", "did", "was", "are", "our", "who", "why", "what", "when", 
-        "where", "book", "books", "may", "see", "let", "put", "say"
+        "me", "us", "we", "it", "him", "her", "them", "all", "top", "get", "can", 
+        "you", "the", "any", "how", "few", "one", "two", "show", "send", "give", 
+        "find", "need", "want", "for", "and", "but", "not", "out", "new", "old", 
+        "use", "has", "had", "did", "was", "are", "our", "who", "why", "what", 
+        "when", "where", "book", "books", "may", "see", "let", "put", "say", "is", 
+        "do", "does", "to", "of", "in", "on", "at", "by", "up", "so", "no", "go", 
+        "be", "he", "she", "an", "a", "if", "or", "as", "am", "my", "at"
     }
 
     # 2. If they just typed the call number directly (e.g., "vm 145 h6 2019")
@@ -134,9 +135,10 @@ def detect_call_number(raw_text):
         if prefix not in ignore_words:
             return text
             
-    # 3. Look for it in the middle of a sentence
-    match2 = re.search(r'\b([a-z]{1,3}\s*\d+(?:\.\d+)?(?:\s*\.?\s*[a-z]\d*)?)\b', text)
-    if match2:
+    # 3. Look for it in the middle of a sentence.
+    # Using finditer to check EVERY potential match instead of stopping at the first one.
+    pattern = r'\b([a-z]{1,3}\s*\d+(?:\.\d+)?(?:\s*\.?\s*[a-z]\d*)?)\b'
+    for match2 in re.finditer(pattern, text):
         prefix = match2.group(1).split()[0]
         if prefix not in ignore_words:
             return match2.group(1).strip()

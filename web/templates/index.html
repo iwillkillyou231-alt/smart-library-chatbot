@@ -219,10 +219,11 @@ function isValidLibrarySearch(message) {
     if (!message) return false;
     
     const text = message.trim().toLowerCase();
-        // NEW: Allow call numbers like "BF181 .V3" to pass through!
-    if (/[a-z]+\s*\d+/.test(text)) return true;
     if (!text) return false;
     
+    // NEW: If the query contains a number (like "10 books" or "top 5"), ALWAYS allow it!
+    if (/\d+/.test(text)) return true;
+
     // 1. Block exact casual words (hi, thanks, ok, etc.)
     if (CASUAL_EXACT.has(text)) return false;
     
@@ -236,7 +237,6 @@ function isValidLibrarySearch(message) {
     const lettersOnly = text.replace(/[^a-z\s]/g, '').trim();
     
     // 5. Block if there isn't at least 3 letters left
-    // (e.g., "a1b2" becomes "ab" -> blocked)
     if (lettersOnly.length < 3) return false;
 
     // 6. Block if the remaining text is just filler words
