@@ -84,28 +84,21 @@ def detect_negations(raw_text):
 
 def detect_limit(raw_text):
     text = raw_text.lower()
-    
-    # If they are asking for a call number, IGNORE numbers in the query
     if "call number" in text or "call no" in text:
         return None
-        
     if "all" in text or "whole" in text:
         return 500 
         
-    # Only grab numbers that are completely standalone
     numbers = re.findall(r'(?<![a-zA-Z])\b\d+\b(?![a-zA-Z])', text)
     if numbers:
         num = int(numbers[0])
-        # If the number is a year (1900-2099), DO NOT treat it as a limit!
-        if 1900 <= num <= 2099:
+        if 1900 <= num <= 2099: # Ignore years
             return None
         return num
-        
     return None
 
 def detect_year(raw_text):
     text = raw_text.lower()
-    # Look specifically for a 4-digit year
     match = re.search(r'\b(19\d{2}|20\d{2})\b', text)
     if match:
         return match.group(1)
@@ -113,13 +106,12 @@ def detect_year(raw_text):
 
 def detect_call_number(raw_text):
     text = raw_text.lower()
-    # Only grab alphanumeric chars and dots (stops at spaces with other words)
-    match = re.search(r'(?:call number|call no)\s+([a-z0-9\.]+(?:\s*[a-z0-9\.]+)?)', text)
+    # Grab everything after "call number"
+    match = re.search(r'(?:call number|call no)[:\s]+([a-z0-9\.\s]+)', text)
     if match:
-        return match.group(1).strip()
-    return None
+        return match.group(1).strip().strip('?.,!')
     
-    # Also try to catch a standalone call number pattern (e.g., BF181 .V3)
+    # Also try to catch a standalone call number (like "BF181 .V3")
     match2 = re.search(r'\b([a-z]{1,3}\d+(?:\.\d+)?(?:\s+[a-z]\d+)?)\b', text)
     if match2:
         return match2.group(1).strip()
@@ -137,5 +129,5 @@ def extract(raw_text, author_list=None):
         "negated":     sorted(detect_negations(raw_text)),
         "limit":       detect_limit(raw_text),
         "year":        detect_year(raw_text),
-        "call_number": detect_call_number(raw_text), # <-- ADD THIS
+        "call_number": detect_call_number(raw_text),
     }

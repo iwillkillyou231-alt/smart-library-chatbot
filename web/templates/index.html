@@ -219,6 +219,8 @@ function isValidLibrarySearch(message) {
     if (!message) return false;
     
     const text = message.trim().toLowerCase();
+        // NEW: Allow call numbers like "BF181 .V3" to pass through!
+    if (/[a-z]+\s*\d+/.test(text)) return true;
     if (!text) return false;
     
     // 1. Block exact casual words (hi, thanks, ok, etc.)
