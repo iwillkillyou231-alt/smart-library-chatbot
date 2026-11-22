@@ -113,11 +113,11 @@ def detect_year(raw_text):
 
 def detect_call_number(raw_text):
     text = raw_text.lower()
-    # Look for "call number" or "call no" and grab everything after it
-    match = re.search(r'(?:call number|call no)\s+([a-z0-9\.\s]+)', text)
+    # Only grab alphanumeric chars and dots (stops at spaces with other words)
+    match = re.search(r'(?:call number|call no)\s+([a-z0-9\.]+(?:\s*[a-z0-9\.]+)?)', text)
     if match:
-        # Clean up the result (remove trailing punctuation)
-        return match.group(1).strip().strip('?.,!')
+        return match.group(1).strip()
+    return None
     
     # Also try to catch a standalone call number pattern (e.g., BF181 .V3)
     match2 = re.search(r'\b([a-z]{1,3}\d+(?:\.\d+)?(?:\s+[a-z]\d+)?)\b', text)
