@@ -74,7 +74,6 @@ def detect_negations(raw_text):
     text = text.replace("dont", "do not").replace("doesnt", "does not")
     
     negated = set()
-    # Regex looks for negation word, skips filler words like "related to", "about", and captures the actual target
     pattern = r"\b(?:not|no|without|except|exclude|avoid)\s+(?:(?:related|about|for|in|on|the|a|an)\s+)*([a-z0-9\-]+)"
     
     for match in re.findall(pattern, text):
@@ -85,12 +84,32 @@ def detect_negations(raw_text):
 
 def detect_limit(raw_text):
     text = raw_text.lower()
+    
+    # If they are asking for a call number, IGNORE numbers in the query
+    if "call number" in text or "call no" in text:
+        return None
+        
     if "all" in text or "whole" in text:
         return 500 
-    numbers = re.findall(r'\b\d+\b', text)
+        
+    # Only grab numbers that are completely standalone
+    numbers = re.findall(r'(?<![a-zA-Z])\b\d+\b(?![a-zA-Z])', text)
     if numbers:
-        return int(numbers[0])
-    return None 
+        num = int(numbers[0])
+        # If the number is a year (1900-2099), DO NOT treat it as a limit!
+        if 1900 <= num <= 2099:
+            return None
+        return num
+        
+    return None
+
+def detect_year(raw_text):
+    text = raw_text.lower()
+    # Look specifically for a 4-digit year
+    match = re.search(r'\b(19\d{2}|20\d{2})\b', text)
+    if match:
+        return match.group(1)
+    return None
 
 def extract(raw_text, author_list=None):
     tokens = tokenize(raw_text)
@@ -101,5 +120,6 @@ def extract(raw_text, author_list=None):
         "category":   detect_category(tokens),
         "followup":   detect_followup(tokens),
         "negated":    sorted(detect_negations(raw_text)),
-        "limit":      detect_limit(raw_text), # New limit extractor
+        "limit":      detect_limit(raw_text),
+        "year":       detect_year(raw_text),
     }

@@ -46,6 +46,12 @@ def score_book(book, query_vec, book_vec, prefs):
             total += WEIGHT_AUTHOR
             explanation.append(f"Author matched: {book['author']}")
 
+                # 4.5 Year match (HARD REJECT)
+    if prefs.get("year"):
+        book_year = str(book.get("year", "")).strip()
+        if book_year != str(prefs["year"]):
+            return 0.0, [f"Excluded (wrong year: {book_year})"]
+
     # 5. Negation handling (HARD REJECT)
     negated = prefs.get("negated") or set()
     if negated:
