@@ -61,7 +61,7 @@ class LibraryEngine:
         # 1. Extract preferences
         prefs = extract(query, self.authors)
 
-        # --- 1. Check for Exact Call Number Match ---
+                # --- 1. Check for Exact Call Number Match ---
         if prefs.get("call_number"):
             target_cn = prefs["call_number"].replace(" ", "").lower()
             print(f"DEBUG: Looking for call number -> '{target_cn}'")
@@ -81,6 +81,13 @@ class LibraryEngine:
                 }
             else:
                 print("DEBUG: NOT FOUND IN CSV")
+                # NEW: If they search for a call number and it's wrong, return NOTHING.
+                return {
+                    "query": query,
+                    "preferences": prefs,
+                    "expanded_tokens": [],
+                    "results": [] 
+                }
 
         # --- 2. Check for Exact Title Match ---
         exact_matches = [
