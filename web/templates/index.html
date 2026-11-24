@@ -16,7 +16,7 @@
     <!-- ============ SIDEBAR ============ -->
     <aside class="sidebar" id="sidebar" aria-label="Library navigation">
         <div class="sidebar-head">
-            <div class="logo" aria-hidden="true">📚</div>
+            <div class="logo" aria-hidden="true"></div>
             <div class="sidebar-head-text">
                 <div class="brand">Smart Library</div>
                 <div class="brand-sub">Group 1 · 500 books</div>
@@ -363,7 +363,7 @@ function renderResults(data, skipIntro = false) {
                 Try different words, or ask about another topic.</p>`;
     }
 
-    let html = skipIntro ? '' : '<p class="intro">Here are the closest matches I found 📚</p>';
+    let html = skipIntro ? '' : '<p class="intro">Here are the closest matches I found</p>';
     if (chips.length) html += `<div class="tags">${chips.join('')}</div>`;
 
     html += '<ol class="book-list">';
@@ -474,7 +474,7 @@ async function sendQuery(q) {
     if (!CASUAL_EXACT.has(text) && typeof isValidLibrarySearch === 'function' && !isValidLibrarySearch(q)) {
         hideWelcome();
         addUserMessage(q);
-        addBotBubble('<p>I didn\'t quite catch that. Could you tell me what book or topic you\'re looking for? 📚</p>');
+        addBotBubble('<p>I didn\'t quite catch that. Could you tell me what book or topic you\'re looking for?</p>');
         input.value = '';
         input.focus();
         return;
@@ -519,7 +519,7 @@ async function sendQuery(q) {
 
         } else if (data.intent === "filtered") {
             lastResults = data.results || [];
-            const header = `<p>Here are the <strong>${escapeHtml(data.filtered_by)}</strong> books 📚</p>`;
+            const header = `<p>Here are the <strong>${escapeHtml(data.filtered_by)}</strong> books</p>`;
             const list = renderResults({ results: data.results, preferences: {} }, true);
             const bubbleEl = addBotBubble(header + list);
             attachBookHandlers(bubbleEl, lastResults);
