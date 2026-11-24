@@ -89,11 +89,21 @@ class LibraryEngine:
                     "results": [] 
                 }
 
-        # --- 2. Check for Exact Title Match ---
-        exact_matches = [
-            b for b in self.books 
-            if b['title'].strip().lower() == query.strip().lower()
-        ]
+        # --- 2. Check for Exact Title Match (Smarter) ---
+        # Clean the user's query (remove punctuation, lowercase, normalize spaces)
+        clean_query = re.sub(r'[^\w\s]', ' ', query.lower())
+        clean_query = re.sub(r'\s+', ' ', clean_query).strip()
+
+        exact_matches = []
+        for b in self.books:
+            # Clean the book title
+            clean_title = re.sub(r'[^\w\s]', ' ', b['title'].lower())
+            clean_title = re.sub(r'\s+', ' ', clean_title).strip()
+            
+            # If the full book title (at least 6 chars) is found inside the user's sentence, it's a match!
+            if len(clean_title) >= 6 and clean_title in clean_query:
+                exact_matches.append(b)
+                
         if exact_matches:
             return {
                 "query": query,
