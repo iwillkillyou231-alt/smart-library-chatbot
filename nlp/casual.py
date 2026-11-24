@@ -62,16 +62,17 @@ RESPONSES = {
 
 
 def detect_intent(tokens, raw_text):
-    
     text = raw_text.lower()
     tset = set(tokens)
+
+    # NEW: Strict help check (only trigger if they are exactly asking for help)
+    help_phrases = ["what can you do", "how do you work", "what do you do", "guide me", "instructions", "help"]
+    if text.strip() in help_phrases:
+        return "help"
 
     for word in WHO:
         if word in text:
             return "who"
-    for word in HELP:
-        if word in text:
-            return "help"
     for word in CASUAL:
         if word in text or word in tset:
             return "casual"
