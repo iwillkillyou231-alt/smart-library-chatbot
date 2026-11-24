@@ -16,7 +16,6 @@ import csv
 import os
 import sys
 
-# Allow imports from project root
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
@@ -81,7 +80,6 @@ def main():
         out = engine.search(q, top_n=TOP_N)
         results = out["results"]
 
-        # Did any of top-N match?
         hit = False
         match_reasons = []
         for book, score, explanation in results:
@@ -116,7 +114,6 @@ def main():
     print(f"RESULTS: {passed}/{total} passed  ({failed} failed)")
     print("=" * 70)
 
-        # Write failure log
     log_path = os.path.join(ROOT, "tests", "error_log.md")
     with open(log_path, "w", encoding="utf-8") as f:
         f.write("# Error Log — Midterm Blind Test\n\n")

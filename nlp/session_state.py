@@ -31,23 +31,19 @@ def match_subcategory(text, subcategories):
 
     text = text.lower().strip().rstrip(".!?")
 
-    # Too short to be a real filter (avoids "hi", "ok", "no")
     if len(text) < 4:
         return None
 
-    # Remove filler words
     for filler in ("engineering", "nursing", "book", "books", "please", "the"):
         text = text.replace(filler, "").strip()
 
     if len(text) < 4:
         return None
 
-    # Exact match
     for sub in subcategories:
         if text == sub.lower():
             return sub
 
-    # Word-level prefix match — text must be a prefix of a WORD in sub
     for sub in subcategories:
         for word in sub.lower().split():
             if word.startswith(text) and len(text) >= 4:

@@ -55,12 +55,10 @@ class LibraryEngine:
         text = re.sub(r"[^\w\s]", " ", text)
         return [t for t in text.split() if len(t) >= 2]
 
-    # ---------- search ----------
     def search(self, query, top_n=5):
         # 1. Extract preferences
         prefs = extract(query, self.authors)
 
-        # --- 1. Check for Exact Call Number Match ---
         if prefs.get("call_number"):
             # Strip EVERYTHING except letters and numbers (removes spaces, dots, dashes)
             target_cn = re.sub(r'[^a-z0-9]', '', prefs["call_number"].lower())
@@ -81,7 +79,6 @@ class LibraryEngine:
                 }
             else:
                 print("DEBUG: NOT FOUND IN CSV")
-                # If they search for a call number and it's wrong, return NOTHING.
                 return {
                     "query": query,
                     "preferences": prefs,
@@ -89,18 +86,14 @@ class LibraryEngine:
                     "results": [] 
                 }
 
-        # --- 2. Check for Exact Title Match (Smarter) ---
-        # Clean the user's query (remove punctuation, lowercase, normalize spaces)
         clean_query = re.sub(r'[^\w\s]', ' ', query.lower())
         clean_query = re.sub(r'\s+', ' ', clean_query).strip()
 
         exact_matches = []
         for b in self.books:
-            # Clean the book title
             clean_title = re.sub(r'[^\w\s]', ' ', b['title'].lower())
             clean_title = re.sub(r'\s+', ' ', clean_title).strip()
             
-            # If the full book title (at least 6 chars) is found inside the user's sentence, it's a match!
             if len(clean_title) >= 6 and clean_title in clean_query:
                 exact_matches.append(b)
                 
@@ -112,20 +105,15 @@ class LibraryEngine:
                 "results": [(exact_matches[0], 1.0, ["Exact title match"])]
             }
 
-        # --- 3. Override top_n if the user asked for a specific number or "all" ---
         if prefs.get("limit"):
             top_n = prefs["limit"]
 
-        # --- 4. Correct Spelling ---
         corrected_tokens = correct_spelling(prefs["tokens"])
 
-        # --- 5. Expand query tokens with synonyms ---
         expanded = expand(corrected_tokens)
 
-        # --- 6. Build query vector ---
         query_vec = tfidf_vector(expanded, self.idf, self.vocabulary)
 
-        # --- 7. Rank ---
         results = rank_books(self.books, query_vec, self.book_vectors,
                              prefs, top_n=top_n)
 

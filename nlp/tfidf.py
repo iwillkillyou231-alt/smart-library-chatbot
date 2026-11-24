@@ -22,7 +22,7 @@ def compute_idf(documents):
     N = len(documents)
     df = Counter()
     for doc in documents:
-        for term in set(doc):   # count each term once per document
+        for term in set(doc):   
             df[term] += 1
 
     idf = {}

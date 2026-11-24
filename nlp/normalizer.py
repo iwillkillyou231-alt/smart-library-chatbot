@@ -10,7 +10,6 @@ What i does:
 
 import re
 
-# Contraction map. Extend only when a real failure case requires it.
 CONTRACTIONS = {
     "don't": "do not",
     "doesn't": "does not",
@@ -37,17 +36,13 @@ CONTRACTIONS = {
 
 
 def expand_contractions(text: str) -> str:
-    """Replace contractions with their expanded forms."""
     for short, full in CONTRACTIONS.items():
-        # word-boundary safe replacement
         text = re.sub(r"\b" + re.escape(short) + r"\b", full, text)
     return text
 
 
 def remove_punctuation(text: str) -> str:
     
-    # Replace hyphens between letters with a space, then remove all other punctuation.
-    # We do this so 'state-of-the-art' -> 'state of the art' and 'don't' -> 'dont'
     text = re.sub(r"(?<=\w)-(?=\w)", " ", text)
     text = re.sub(r"[^\w\s]", " ", text)
     return text
@@ -61,11 +56,10 @@ def normalize(text: str) -> str:
     text = text.lower()
     text = expand_contractions(text)
     text = remove_punctuation(text)
-    text = re.sub(r"\s+", " ", text)   # collapse whitespace
+    text = re.sub(r"\s+", " ", text)   
     return text.strip()
 
 
-# -------- quick manual test (run: python nlp/normalizer.py) --------
 if __name__ == "__main__":
     samples = [
         "I want a beginner-friendly book about cybersecurity, especially network attacks.",

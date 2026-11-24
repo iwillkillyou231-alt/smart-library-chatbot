@@ -10,13 +10,11 @@
 
 <div class="app" id="app">
 
-    <!-- ============ MOBILE SIDEBAR BACKDROP ============ -->
     <div class="sidebar-backdrop" id="sidebarBackdrop" aria-hidden="true"></div>
 
-    <!-- ============ SIDEBAR ============ -->
     <aside class="sidebar" id="sidebar" aria-label="Library navigation">
         <div class="sidebar-head">
-            <div class="logo" aria-hidden="true"></div>
+            <div class="logo" aria-hidden="true">📚</div>
             <div class="sidebar-head-text">
                 <div class="brand">Smart Library</div>
                 <div class="brand-sub">Group 1 · 500 books</div>
@@ -42,7 +40,6 @@
         </button>
     </aside>
 
-    <!-- ============ MAIN ============ -->
     <main class="main">
         <div class="chat-panel">
 
@@ -194,9 +191,6 @@ const modalBody        = document.getElementById('modalBody');
 const modalBackdrop    = document.getElementById('modalBackdrop');
 const modalClose       = document.getElementById('modalClose');
 
-/* ============================================================
-   HISTORY + VALIDATION
-   ============================================================ */
 const CASUAL_EXACT = new Set([
     "hi","hello","hey","yo","sup","howdy","hiya","ho","hello?",
     "thanks","thank","ty","thank you","thx","salamat",
@@ -221,25 +215,18 @@ function isValidLibrarySearch(message) {
     const text = message.trim().toLowerCase();
     if (!text) return false;
     
-    // NEW: If the query contains a number (like "10 books" or "top 5"), ALWAYS allow it!
     if (/\d+/.test(text)) return true;
 
-    // 1. Block exact casual words (hi, thanks, ok, etc.)
     if (CASUAL_EXACT.has(text)) return false;
     
-    // 2. Allow specific short words (law, ai, cs, etc.)
     if (SHORT_VALID.has(text)) return true;
     
-    // 3. Block if there are NO letters at all (e.g. "123", "!@#", "123!@#")
     if (!/[a-z]/.test(text)) return false;
 
-    // 4. Strip out ALL numbers, symbols, and punctuation
     const lettersOnly = text.replace(/[^a-z\s]/g, '').trim();
     
-    // 5. Block if there isn't at least 3 letters left
     if (lettersOnly.length < 3) return false;
 
-    // 6. Block if the remaining text is just filler words
     const fillers = new Set([
         "the","a","an","is","are","for","about","i","want","need",
         "looking","find","show","me","please","can","you","give",
@@ -259,9 +246,6 @@ let lastResults = [];
 
 function saveHistory() { localStorage.setItem('libraryHistory', JSON.stringify(history)); }
 
-/* ============================================================
-   UTILITIES
-   ============================================================ */
 function escapeHtml(s) {
     if (s == null) return '';
     return String(s)
@@ -270,9 +254,6 @@ function escapeHtml(s) {
 }
 function scrollBottom() { messages.scrollTop = messages.scrollHeight; }
 
-/* ============================================================
-   WELCOME + HISTORY RENDER
-   ============================================================ */
 function showWelcome() { welcomeEl.classList.remove('hidden'); }
 function hideWelcome() { welcomeEl.classList.add('hidden'); }
 
@@ -310,9 +291,6 @@ function pushHistory(q) {
     renderHistory();
 }
 
-/* ============================================================
-   MESSAGES
-   ============================================================ */
 function addUserMessage(text) {
     const el = document.createElement('div');
     el.className = 'msg user';
@@ -347,9 +325,6 @@ function addLoadingBubble() {
     return el;
 }
 
-/* ============================================================
-   RESULT RENDERERS
-   ============================================================ */
 function renderResults(data, skipIntro = false) {
     const prefs = data.preferences || {};
     const chips = [];
@@ -463,14 +438,12 @@ document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && modalBackdrop.classList.contains('open')) closeModal();
 });
 
-/* = MAIN: SEND QUERY ==== */
 
 async function sendQuery(q) {
     if (!q) return;
 
     const text = q.trim().toLowerCase();
 
-    // NEW: Allow casual words (hi, thanks) to pass through to the backend!
     if (!CASUAL_EXACT.has(text) && typeof isValidLibrarySearch === 'function' && !isValidLibrarySearch(q)) {
         hideWelcome();
         addUserMessage(q);
@@ -485,7 +458,6 @@ async function sendQuery(q) {
     input.value = '';
     sendBtn.disabled = true;
 
-    // NEW: Only save to search history if it's an actual book search (don't save "hi")
     if (isValidLibrarySearch(q)) {
         pushHistory(q);
     }
@@ -496,7 +468,6 @@ async function sendQuery(q) {
         const res = await fetch('/api/search', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            // NEW: Removed top_n: 8 here! We let the Python extractor decide the limit.
             body: JSON.stringify({ query: q }) 
         });
         const data = await res.json();
@@ -540,7 +511,6 @@ async function sendQuery(q) {
     input.focus();
 }
 
-/* - EVENTS = */
 form.addEventListener('submit', e => {
     e.preventDefault();
     sendQuery(input.value.trim());
@@ -550,7 +520,6 @@ document.querySelectorAll('.hint-chip, .welcome-card').forEach(btn => {
     btn.addEventListener('click', () => sendQuery(btn.dataset.q));
 });
 
-/* Surprise Me */
 const SURPRISES = [
     "beginner friendly books",
     "psychology books",
@@ -566,7 +535,6 @@ surpriseBtn.addEventListener('click', () => {
     sendQuery(q);
 });
 
-/* Reset / New chat */
 function resetChat() {
     messages.innerHTML = '';
     lastResults = [];
@@ -594,38 +562,29 @@ menuBtn.addEventListener('click', () => {
     }
 });
 
-/* Tap the dim backdrop to close the drawer */
 sidebarBackdrop.addEventListener('click', closeSidebarMobile);
 
-/* Escape key closes the drawer */
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && sidebar.classList.contains('open')) {
         closeSidebarMobile();
     }
 });
 
-/* Collapse button — behaves differently on mobile vs desktop */
 collapseBtn.addEventListener('click', () => {
-    // On mobile: close the drawer
     if (window.innerWidth <= 800) {
         closeSidebarMobile();
         return;
     }
-    // On desktop: collapse to icon-only sidebar
     const collapsed = appEl.classList.toggle('sidebar-collapsed');
     collapseBtn.setAttribute('aria-label', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
     collapseBtn.setAttribute('title', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
     collapseBtn.textContent = collapsed ? '›' : '‹';
 });
 
-/* If the user resizes to desktop, reset drawer state */
 window.addEventListener('resize', () => {
     if (window.innerWidth > 800) closeSidebarMobile();
 });
 
-/* ============================================================
-   BOOT
-   ============================================================ */
 renderHistory();
 showWelcome();
 input.focus();

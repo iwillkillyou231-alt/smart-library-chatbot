@@ -85,18 +85,15 @@ def detect_negations(raw_text):
 def detect_limit(raw_text):
     text = raw_text.lower()
     
-    # If they are asking for a call number, IGNORE numbers in the query
     if "call number" in text or "call no" in text:
         return None
         
     if "all" in text or "whole" in text:
         return 500 
         
-    # Only grab numbers that are completely standalone
     numbers = re.findall(r'(?<![a-zA-Z])\b\d+\b(?![a-zA-Z])', text)
     if numbers:
         num = int(numbers[0])
-        # If the number is a year (1900-2099), DO NOT treat it as a limit!
         if 1900 <= num <= 2099:
             return None
         return num
@@ -113,7 +110,6 @@ def detect_year(raw_text):
 def detect_call_number(raw_text):
     text = raw_text.lower().strip()
     
-    # 1. If they explicitly typed "call number" or "call no"
     match = re.search(r'(?:call number|call no)[:\s]+(.*)', text)
     if match:
         return match.group(1).strip().strip('?.,!')
@@ -128,14 +124,11 @@ def detect_call_number(raw_text):
         "be", "he", "she", "an", "a", "if", "or", "as", "am", "my", "at", "this"
     }
 
-    # 2. If they just typed the call number directly
     if re.match(r'^[a-z]{1,3}\s*\d+', text):
         prefix = text.split()[0]
         if prefix not in ignore_words:
             return text
             
-    # 3. Look for it in the middle of a sentence. 
-    # NEW: Grabs multiple blocks (e.g., "ti 213 ss 2020")
     pattern = r'\b([a-z]{1,3}\s*\d+(?:[\s\.][a-z0-9]+)*)'
     for match2 in re.finditer(pattern, text):
         prefix = match2.group(1).split()[0]

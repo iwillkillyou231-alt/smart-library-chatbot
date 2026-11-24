@@ -23,7 +23,7 @@ app = Flask(
 )
 app.secret_key = "smart-library-secret-key-change-me"
 
-# Build the engine once at startup
+# Build the engine once at startup`~`
 print("📚 Loading library dataset...")
 engine = LibraryEngine.from_csv()
 print(f"✅ Loaded {len(engine.books)} books. Vocabulary size: {len(engine.vocabulary)}")

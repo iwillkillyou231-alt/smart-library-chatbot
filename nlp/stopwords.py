@@ -4,7 +4,6 @@ Common English stopwords
 """
 
 STOPWORDS = {
-    # core English stopwords
     "a", "an", "the", "and", "or", "but", "if", "then", "else",
     "of", "in", "on", "at", "to", "for", "from", "by", "with", "about",
     "is", "are", "was", "were", "be", "been", "being",
@@ -17,7 +16,6 @@ STOPWORDS = {
     "some", "any", "all", "each", "every", "few", "many", "much",
     "please", "want", "need", "looking", "find", "give", "show",
 
-    # filler / generic words that hurt topic matching
     "book", "books", "textbook", "textbooks", "guide", "guides",
     "manual", "reading", "read", "something", "anything",
     "someone", "everything", "like", "want", "wanted",

@@ -93,7 +93,6 @@ def parse_file(path):
         print("     ⚠️  Empty file, skipping")
         return []
 
-    # Find header row
     header_row_idx = None
     headers = []
     for i, row in enumerate(rows[:5]):

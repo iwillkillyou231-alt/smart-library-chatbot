@@ -5,7 +5,6 @@ def cosine_similarity(vec_a, vec_b):
     if not vec_a or not vec_b:
         return 0.0
 
-    # Dot product: only iteate over shared terms
     dot = 0.0
     for term, val_a in vec_a.items():
         val_b = vec_b.get(term)
@@ -15,7 +14,6 @@ def cosine_similarity(vec_a, vec_b):
     if dot == 0.0:
         return 0.0
 
-    # Magnitudes
     mag_a = math.sqrt(sum(v * v for v in vec_a.values()))
     mag_b = math.sqrt(sum(v * v for v in vec_b.values()))
 

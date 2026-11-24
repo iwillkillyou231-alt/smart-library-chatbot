@@ -65,7 +65,6 @@ def detect_intent(tokens, raw_text):
     text = raw_text.lower()
     tset = set(tokens)
 
-    # NEW: Strict help check (only trigger if they are exactly asking for help)
     help_phrases = ["what can you do", "how do you work", "what do you do", "guide me", "instructions", "help"]
     if text.strip() in help_phrases:
         return "help"

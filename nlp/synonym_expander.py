@@ -16,7 +16,6 @@ def expand(tokens):
 
     for tok in tokens:
         for syn in SYNONYMS.get(tok, []):
-            # synonyms may be multi-word phrases -> split for token list
             for sub in syn.lower().split():
                 if sub not in seen:
                     seen.add(sub)
@@ -29,7 +28,6 @@ def expand_string(text):
     return " ".join(expand(text.lower().split()))
 
 
-# -------- quick manual test --------
 if __name__ == "__main__":
     samples = [
         ["hacking", "beginner"],

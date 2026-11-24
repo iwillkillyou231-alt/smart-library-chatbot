@@ -28,7 +28,6 @@ def tokenize(text: str, keep_stopwords: bool = False) -> list:
     return tokens
 
 
-# -------- quick manual test (run: python -m nlp.tokenizer) --------
 if __name__ == "__main__":
     samples = [
         "I want a beginner-friendly book about cybersecurity, especially network attacks.",
