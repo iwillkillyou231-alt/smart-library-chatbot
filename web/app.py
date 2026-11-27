@@ -1,7 +1,6 @@
 import os
 import sys
 
-# --- allow "from nlp.engine import ..." when running from web/ ---
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
@@ -23,7 +22,6 @@ app = Flask(
 )
 app.secret_key = "smart-library-secret-key-change-me"
 
-# Build the engine once at startup`~`
 print("📚 Loading library dataset...")
 engine = LibraryEngine.from_csv()
 print(f"✅ Loaded {len(engine.books)} books. Vocabulary size: {len(engine.vocabulary)}")
@@ -42,7 +40,6 @@ def search():
         if not query:
             return jsonify({"error": "Empty query"}), 400
 
-        # --- NEW: Handle "how many books" question ---
         query_lower = query.lower()
         if "how many" in query_lower and "book" in query_lower:
             return jsonify({
@@ -54,7 +51,6 @@ def search():
                 "preferences": {}
             })
 
-        # --- NEW: Handle out-of-scope questions (weather, time, etc) ---
         out_of_scope = ["weather", "time is it", "date", "joke", "food", "movie", "sports", "basketball"]
         if any(word in query_lower for word in out_of_scope):
             return jsonify({
@@ -66,10 +62,8 @@ def search():
                 "preferences": {}
             })
 
-        # -------- 1. Is this a subcategory filter reply? --------
         ctx = get_context()
 
-        # -------- 1. Is this a subcategory filter reply? --------
         ctx = get_context()
         if ctx["waiting"] and ctx["subcategories"]:
             matched = match_subcategory(query, ctx["subcategories"])
@@ -87,17 +81,13 @@ def search():
                     "preferences": {},
                     "results":     filtered,
                 })
-            # If the user changed topic, fall through to a fresh search
             clear_context()
 
-        # -------- 2. Casual / off-topic intent --------
-                # -------- 2. Casual / off-topic intent --------
         prefs = extract(query, engine.authors)
         intent = detect_intent(prefs["tokens"], query)
         if intent != "search":
             reply = casual_response(intent)
 
-            # Convert `negated` set to list for JSON
             prefs_safe = dict(prefs)
             if isinstance(prefs_safe.get("negated"), set):
                 prefs_safe["negated"] = sorted(prefs_safe["negated"])
@@ -111,7 +101,6 @@ def search():
                 "preferences": prefs_safe,
             })
 
-        # -------- 3. Run the search --------
         top_n = int(data.get("top_n", 8))
         out = engine.search(query, top_n=top_n)
 
@@ -133,12 +122,10 @@ def search():
                 "explanation":   explanation,
             })
 
-        # Fix JSON serialization for `negated` set
         prefs_out = dict(out["preferences"])
         if isinstance(prefs_out.get("negated"), set):
             prefs_out["negated"] = sorted(prefs_out["negated"])
 
-        # -------- 4. Should we prompt for subcategory filtering? --------
         subcats = list(dict.fromkeys(
             r["subcategory"] for r in results if r["subcategory"]
         ))

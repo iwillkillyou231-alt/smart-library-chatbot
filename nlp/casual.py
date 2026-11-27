@@ -1,5 +1,5 @@
 """
-haan nga hard-coded etoy sir, wen ngem for greeings lang, good for the guide
+hard-code for greeings lang, good for the guide
 """
 
 import random

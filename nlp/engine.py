@@ -56,11 +56,9 @@ class LibraryEngine:
         return [t for t in text.split() if len(t) >= 2]
 
     def search(self, query, top_n=5):
-        # 1. Extract preferences
         prefs = extract(query, self.authors)
 
         if prefs.get("call_number"):
-            # Strip EVERYTHING except letters and numbers (removes spaces, dots, dashes)
             target_cn = re.sub(r'[^a-z0-9]', '', prefs["call_number"].lower())
             print(f"DEBUG: Looking for call number -> '{target_cn}'")
             

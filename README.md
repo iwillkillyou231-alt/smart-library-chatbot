@@ -15,7 +15,7 @@ No AI APIs, no pretrained models — everything is built from scratch.
 3. [Data Dictionary](#3-data-dictionary)
 4. [Cleaning Rules](#4-cleaning-rules)
 5. [NLP Pipeline](#5-nlp-pipeline)
-6. [Error Log — Midterm Blind Test](#6-error-log--midterm-blind-test)
+6. [Error Log — Midterm Blind Test](#6-error-log--blind-test)
 
 ---
 

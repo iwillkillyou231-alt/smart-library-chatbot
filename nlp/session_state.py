@@ -2,7 +2,6 @@ from flask import session
 
 
 def save_context(query, results, subcategories):
-    """Store the last search context in the session."""
     session["last_query"] = query
     session["last_results"] = results[:10]
     session["last_subcategories"] = list(subcategories)
