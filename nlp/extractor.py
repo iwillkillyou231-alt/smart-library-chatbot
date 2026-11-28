@@ -74,10 +74,10 @@ def detect_negations(raw_text):
     text = text.replace("dont", "do not").replace("doesnt", "does not")
     
     negated = set()
-    pattern = r"\b(?:not|no|without|except|exclude|avoid)\s+(?:(?:related|about|for|in|on|the|a|an)\s+)*([a-z0-9\-]+)"
+    pattern = r"\b(?:not|no|without|except|exclude|avoid|do not)\s+(?:(?:related|about|for|in|on|the|a|an|to|any|of|with|from|by|want|need|recommend|other|books|book)\s+)*([a-z0-9\-]+)"
     
     for match in re.findall(pattern, text):
-        if match not in {"want", "need", "book", "books", "looking", "find"}:
+        if match not in {"want", "need", "book", "books", "looking", "find", "me", "this", "recommend", "other"}:
             negated.add(match)
             
     return negated
